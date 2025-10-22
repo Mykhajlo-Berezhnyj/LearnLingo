@@ -1,10 +1,14 @@
 import { Outlet } from "react-router-dom";
 
-export default function Teachers() {
+type TeachersProps = {
+  className?: string;
+};
+
+export default function Teachers({ className }: TeachersProps) {
   return (
-    <div>
+    <section className={className}>
       <h2>Teachers</h2>
       <Outlet />
-    </div>
+    </section>
   );
 }

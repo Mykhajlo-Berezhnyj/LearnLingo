@@ -1,0 +1,21 @@
+.imgWrapper {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  padding-left: 103.64px;
+  padding-right: 104.64px;
+}
+
+.imgUnion {
+  position: absolute;
+  max-width: 339px;
+  top: 80px;
+  z-index: 1;
+}
+
+.imgImac {
+  z-index: 300;
+}
