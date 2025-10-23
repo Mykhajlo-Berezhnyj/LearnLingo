@@ -29,8 +29,8 @@ export default function Imac({ className }) {
           y2="247.251"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="var(--svg-bg-start0, #EEB055" />
-          <stop offset="1" stop-color="var(--svg-bg-end0, #D08F38" />
+          <stop stopColor="var(--svg-bg-start0, #EEB055)" />
+          <stop offset="1" stopColor="var(--svg-bg-end0, #D08F38" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_20901_12"
@@ -40,8 +40,8 @@ export default function Imac({ className }) {
           y2="121.053"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="var(--svg-bg-start1, #FBE9BA" />
-          <stop offset="1" stop-color="var(--svg-bg-end1, #E7C885" />
+          <stop stopColor="var(--svg-bg-start1, #FBE9BA)" />
+          <stop offset="1" stopColor="var(--svg-bg-end1, #E7C885)" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_20901_12"
@@ -51,8 +51,8 @@ export default function Imac({ className }) {
           y2="121.053"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="var(--svg-bg-start1, #FBE9BA" />
-          <stop offset="1" stop-color="var(--svg-bg-end1, #E7C885" />
+          <stop stopColor="var(--svg-bg-start1, #FBE9BA)" />
+          <stop offset="1" stopColor="var(--svg-bg-end1, #E7C885)" />
         </linearGradient>
       </defs>
     </svg>

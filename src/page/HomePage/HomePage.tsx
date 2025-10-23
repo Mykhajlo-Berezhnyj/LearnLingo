@@ -1,3 +1,4 @@
+import Advantages from "../../components/Advantages/Advantages";
 import Container from "../../components/Container/Container";
 import HeroBanners from "../../components/HeroBanners/HeroBanners";
 import HeroImg from "../../components/HeroImg/HeroImg";
@@ -9,6 +10,7 @@ export default function HomePage() {
       <Container className={css["hero-container"]}>
         <HeroBanners className={css.banners} />
         <HeroImg className={css.heroImg} />
+        <Advantages className={css.advantages} />
       </Container>
     </section>
   );

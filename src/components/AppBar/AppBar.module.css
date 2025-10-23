@@ -1,0 +1,22 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 661px;
+  padding: 0 128px;
+}
+
+.logoWrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.navBar {
+}

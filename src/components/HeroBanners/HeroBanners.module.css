@@ -1,3 +1,9 @@
 .banner-span {
   background: var(--color-secondary);
+  font-style: italic;
+  font-weight: var(--fw-normal);
+}
+
+.banner-text {
+  max-width: 471px;
 }

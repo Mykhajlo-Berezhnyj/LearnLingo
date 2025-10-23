@@ -34,3 +34,12 @@
   border-radius: var(--radius);
   background-color: var(--color-secondary);
 }
+
+.advantages {
+  grid-area: advantages;
+  padding: 40px 122px;
+  border-radius: var(--radius);
+  position: relative;
+  width: 100%;
+  max-width: 1312px;
+}

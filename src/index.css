@@ -4,7 +4,7 @@
   --bgcolor-banner: #f8f8f8;
   --color-primary: #f4c550;
   --color-secondary: #fbe9ba;
-  ----button-hover: #ffdc86;
+  --button-hover: #ffdc86;
 
   /* font-size */
   --fs-base: 1rem;
@@ -26,11 +26,13 @@
   --fw-bold: 700;
 
   --fs-h1: 3rem;
-  --fs-h2: 1.5rem;
+  --fs-h2: 1.75rem;
+  --fs-h3: 1.5rem;
   --fs-h3: 1.25rem;
   --lh-h1: 1.2;
-  --lh-h2: 1.33;
-  --lh-h3: 1.2;
+  --lh-h2: 1.142;
+  --lh-h3: 1.33;
+  --lh-h4: 1.2;
 
   --color-font-main: #121417;
   --color-font-white: #ffffff;
@@ -45,12 +47,8 @@
   font-weight: var(--fw-medium);
   line-height: var(--lh-base);
   color: var(--color-font-main);
-
-  font-weight: var(--fw-medium);
-  font-style: Regular;
-  font-size: 16px;
-  line-height: 1.5;
-  letter-spacing: -2%;
+  letter-spacing: var(-ltsp-base);
+  text-align: left;
 
   color-scheme: light dark;
   color: var(--color-font-main);
@@ -97,14 +95,8 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
@@ -151,20 +143,19 @@ button:focus-visible {
 
 h1 {
   font-size: var(--fs-h1);
-  letter-spacing: calc(56 / 48);
+  font-weight: var(--fw-medium);
+  line-height: calc(56 / 48);
 }
 
 h2 {
   font-size: var(--fs-h2);
   font-weight: var(--fw-medium);
-  letter-spacing: 0;
-  line-height: 0;
+  line-height: var(--lh-h2);
 }
 
-h1 {
-  font-weight: 500;
-  font-size: 48px;
-  line-height: 1.16667;
-  letter-spacing: -0.02em;
-  color: #121417;
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0;
+  line-height: 0;
 }

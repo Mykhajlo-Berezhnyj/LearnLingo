@@ -1,0 +1,54 @@
+.list {
+  display: flex;
+  gap: 100px;
+  margin-left: 1px;
+  align-items: flex-start;
+}
+
+.item {
+  display: flex;
+  gap: 16px;
+}
+
+.dashedBorder {
+  position: absolute;
+  stroke-width: 1.5;
+  stroke-dasharray: 15 15;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: dashAndColor 3s infinite linear;
+}
+
+.dataH2 {
+  white-space: nowrap;
+}
+
+.label {
+  font-size: var(--fs-small);
+  line-height: var(--lh-big);
+  color: var(--color-font-second);
+}
+
+@keyframes dashAndColor {
+  0% {
+    stroke-dashoffset: 0;
+    stroke: var(--color-primary);
+  }
+  25% {
+    stroke-dashoffset: -30;
+    stroke: var(--color-secondary);
+  }
+  50% {
+    stroke-dashoffset: -60;
+    stroke: var(--color-primary);
+  }
+  75% {
+    stroke-dashoffset: -90;
+    stroke: var(--color-secondary);
+  }
+  100% {
+    stroke-dashoffset: -120;
+    stroke: var(--color-primary);
+  }
+}
