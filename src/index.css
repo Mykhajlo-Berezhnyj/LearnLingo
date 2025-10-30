@@ -4,7 +4,21 @@
   --bgcolor-banner: #f8f8f8;
   --color-primary: #f4c550;
   --color-secondary: #fbe9ba;
+  --color-primary-rgb: 244, 197, 80;
   --button-hover: #ffdc86;
+  --color-border-input: #1214171a;
+  --link-animation-color: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.18) 36.988%,
+    rgba(255, 255, 255, 0.13) 64.3599%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  --color-font-main: #121417;
+  --color-font-white: #ffffff;
+  --color-font-second: #8a8a89;
+  --color-font-thirty: #12141733;
 
   /* font-size */
   --fs-base: 1rem;
@@ -28,16 +42,11 @@
   --fs-h1: 3rem;
   --fs-h2: 1.75rem;
   --fs-h3: 1.5rem;
-  --fs-h3: 1.25rem;
+  --fs-h4: 1.25rem;
   --lh-h1: 1.2;
   --lh-h2: 1.142;
   --lh-h3: 1.33;
   --lh-h4: 1.2;
-
-  --color-font-main: #121417;
-  --color-font-white: #ffffff;
-  --color-font-second: #8a8a89;
-  --color-font-thirty: #12141733;
 
   --radius: 1.875rem;
   --btn-radius: 1.33rem;
@@ -83,6 +92,11 @@ ol {
   margin: 0;
 }
 
+input {
+  border: none;
+  outline: none;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -95,6 +109,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  justify-content: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -104,29 +119,43 @@ button {
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  position: relative;
   gap: 0px;
   border: none;
   outline: none;
   cursor: pointer;
   border-radius: var(--btn-radius);
-  padding-block: 16px;
-  padding-inline: 88px;
-  width: 267px;
-  height: 60px;
   font-size: 1em;
   font-weight: var(--fw-bold);
   font-family: inherit;
-  background-color: var(--color-primary);
   transition: background-color 0.25s;
+
+  &:active {
+    border: none;
+    outline: none;
+  }
 }
 
-button:hover {
+button::before {
+  position: absolute;
+  top: -30px;
+  left: center;
+  content: "";
+  width: 30px;
+  height: 100px;
+  background-image: var(--link-animation-color);
+  transform: rotate(27deg);
+  opacity: 0;
+  animation: lightning 5s infinite ease-out;
+}
+
+/* button:hover {
   border-color: #646cff;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 /* 
 @media (prefers-color-scheme: light) {
   :root {
@@ -158,4 +187,19 @@ h3 {
   font-weight: var(--fw-medium);
   letter-spacing: 0;
   line-height: 0;
+}
+
+@keyframes lightning {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  10% {
+    left: 100%;
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }

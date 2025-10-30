@@ -1,0 +1,28 @@
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-primary);
+  width: 36px;
+  height: 36px;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+}
+
+.username {
+  font-size: var(--fs-h4);
+}
+
+.iconLogOut {
+  stroke: red;
+  width: 20px;
+  height: 20px;
+}

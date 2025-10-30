@@ -1,4 +1,12 @@
 .navList {
   display: flex;
-  gap: 8px;
+  gap: 28px;
+}
+
+.link {
+  color: var(--color-font-main);
+}
+
+.active {
+  color: var(--color-primary);
 }

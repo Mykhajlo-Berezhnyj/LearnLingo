@@ -17,7 +17,9 @@ export default function HeroBanners({ className }: HeroBannersProps) {
         Elevate your language proficiency to new heights by connecting with
         highly qualified and experienced tutors.
       </p>
-      <Button>Get started</Button>
+      <Button color="btnPrimary" className={css.btnHero}>
+        Get started
+      </Button>
     </section>
   );
 }

@@ -1,0 +1,31 @@
+.btnLogIn {
+  /* width: 73px; */
+  height: 20px;
+  padding: 0;
+  gap: 8px;
+  text-wrap: nowrap;
+  background-color: transparent;
+
+  &:hover {
+    scale: 1.1;
+  }
+  &:hover .iconLogain {
+    stroke: var(--color-secondary);
+  }
+}
+
+.iconLogin {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-primary);
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.iconLogOut {
+  width: 20px;
+  height: 20px;
+  stroke: red;
+}

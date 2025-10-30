@@ -7,3 +7,10 @@
 .banner-text {
   max-width: 471px;
 }
+
+.btnHero {
+  padding-block: 16px;
+  padding-inline: 88px;
+  width: 267px;
+  height: 60px;
+}

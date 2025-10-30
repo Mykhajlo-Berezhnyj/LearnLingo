@@ -7,8 +7,8 @@ header {
 .headerContainer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
-  max-width: 661px;
   padding: 0 128px;
 }
 
@@ -18,5 +18,9 @@ header {
   align-items: center;
 }
 
-.navBar {
+.userMenu {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 }

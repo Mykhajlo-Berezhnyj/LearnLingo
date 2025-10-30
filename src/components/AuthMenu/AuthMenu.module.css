@@ -1,0 +1,41 @@
+.btnWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+/* .btnLogin {
+  width: 73px;
+  height: 20px;
+  padding: 0;
+  gap: 8px;
+  text-wrap: nowrap;
+  background-color: transparent;
+
+  &:hover {
+    scale: 1.1;
+  }
+  &:hover .iconLogain {
+    stroke: var(--color-secondary);
+  }
+}
+
+.iconLogin {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-primary);
+} */
+
+.btnRegister {
+  width: 166px;
+  height: 48px;
+  padding: 14px, 39px;
+  background-color: var(--color-font-main);
+  color: var(--color-font-white);
+
+  &:hover {
+    color: var(--color-font-black);
+    background-color: var(--color-primary);
+  }
+}
