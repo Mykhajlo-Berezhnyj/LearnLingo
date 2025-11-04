@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import css from "./HeroBanners.module.css";
 
@@ -6,6 +7,8 @@ type HeroBannersProps = {
 };
 
 export default function HeroBanners({ className }: HeroBannersProps) {
+  const navigate = useNavigate();
+
   return (
     <section className={className}>
       <h1>
@@ -17,7 +20,11 @@ export default function HeroBanners({ className }: HeroBannersProps) {
         Elevate your language proficiency to new heights by connecting with
         highly qualified and experienced tutors.
       </p>
-      <Button color="btnPrimary" className={css.btnHero}>
+      <Button
+        color="btnPrimary"
+        className={css.btnHero}
+        onClick={() => navigate("/teachers")}
+      >
         Get started
       </Button>
     </section>

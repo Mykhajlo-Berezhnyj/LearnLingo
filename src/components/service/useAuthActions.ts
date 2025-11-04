@@ -14,6 +14,7 @@ import { auth, database } from "../../firebase";
 import { useAuthStore } from "../zustand/stores/authStore";
 import { FirebaseError } from "firebase/app";
 import type { RegistrationData, LoginData } from "../validation/validation";
+import { usePaginatedTeachersStore } from "../zustand/stores/teachers";
 
 export function useAuthActions() {
   const setUser = useAuthStore.getState().setUser;
@@ -74,6 +75,7 @@ export function useAuthActions() {
   const logout = async (): Promise<void> => {
     await signOut(auth);
     setUser(null);
+    usePaginatedTeachersStore.getState().resetFavorites();
   };
 
   const googleLogin = async (): Promise<User> => {

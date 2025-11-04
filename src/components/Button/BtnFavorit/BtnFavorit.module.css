@@ -1,0 +1,11 @@
+.isFavorite {
+  stroke: var(--color-primary);
+  fill: var(--color-primary);
+  stroke-width: 1px;
+}
+
+.noFavorite {
+  fill: none;
+  stroke: var(--color-font-main);
+  stroke-width: 2px;
+}

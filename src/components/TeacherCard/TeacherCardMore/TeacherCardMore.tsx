@@ -19,15 +19,15 @@ export default function TeacherCardMore({
           <li key={index} className={css.reviewItem}>
             <div className={css.reviewerInfo}>
               <div className={css.reviewerThumb}>
-                {teacher.avatar_url ? (
+                {r.reviewer_avatar ? (
                   <img
-                    src={teacher.avatar_url}
-                    alt={teacher.name}
+                    src={r.reviewer_avatar}
+                    alt={r.reviewer_name}
                     className={css.avatar}
                   />
                 ) : (
                   <div className={css.avatarPlaceholder}>
-                    {teacher.name?.[0]?.toUpperCase() || "?"}
+                    {r.reviewer_name?.[0]?.toUpperCase() || "?"}
                   </div>
                 )}
               </div>

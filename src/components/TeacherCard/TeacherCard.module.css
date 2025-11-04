@@ -13,7 +13,7 @@
   position: relative;
   width: 120px;
   height: 120px;
-  padding: 12px;
+  padding: 9px;
   border-radius: 50%;
   border: 3px solid var(--color-secondary);
 }
@@ -21,8 +21,8 @@
 .thumb::before {
   content: "";
   position: absolute;
-  top: 19px;
-  right: 23px;
+  top: 16px;
+  right: 20px;
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -86,25 +86,35 @@
   align-content: center;
 }
 
-.statInfoList {
+.headerUp {
   display: flex;
   height: 26px;
-  gap: 32px;
+  gap: 64px;
   align-items: center;
-  padding-block: 1px;
 }
 
-.statInfoList > *:not(:nth-last-child(-n + 2))::after {
+.statInfoList {
+  display: flex;
+  height: 24px;
+  gap: 32px;
+  align-items: center;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.statInfoList > *:not(:nth-last-child(-n + 1))::after {
   content: "";
+  position: absolute;
   display: block;
   width: 1px;
   height: 16px;
-  padding-right: 16px;
-  padding-block: 4px;
-  color: var(--color-font-thirty);
+  right: -16px;
+  top: 4px;
+  background-color: var(--color-font-thirty);
 }
 
 .statInfoItem {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -112,12 +122,16 @@
   height: 24px;
 }
 
+.book {
+  stroke: var(--color-font-main);
+}
+
 .statinfoPrice {
   color: #38cd3e;
 }
 
 .btnFavorit {
-  margin-left: 32px;
+  stroke: var(--color-font-main);
 }
 
 .baseInfo {
@@ -131,16 +145,11 @@
   display: flex;
   gap: 3px;
   max-width: 100%;
-  align-items: center;
-}
-
-.baseInfoDt {
-  align-content: center;
+  align-items: baseline;
 }
 
 .baseInfoDd {
   margin-left: 0;
-  align-content: center;
 }
 
 .baseInfoDdLanguages {
@@ -180,9 +189,15 @@
   font-size: var(--fs-small);
   font-weight: var(--fw-medium);
   line-height: var(--lh-middle);
+  letter-spacing: 0;
 }
 
 .levelList li:first-child {
   background-color: var(--color-primary);
   border: none;
+}
+
+.btnTrial {
+  width: 232px;
+  height: 60px;
 }

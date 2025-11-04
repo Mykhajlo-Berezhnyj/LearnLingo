@@ -1,16 +1,12 @@
-import LogoIcon from "../../img/logo.svg?react";
+import LogoIcon from "../../../public/logo.svg?react";
 import Icon from "../Icon/Icon";
+import css from "./Logo.module.css";
 
-type LogoProps = {
-  className?: string;
-  logoClass?: string;
-};
-
-export default function Logo({ className, logoClass }: LogoProps) {
+export default function Logo({ className }: { className: string }) {
   return (
     <div className={className}>
-      <Icon SvgComponent={LogoIcon} className={logoClass} />
-      <p className={className}>LearnLingo</p>
+      <Icon SvgComponent={LogoIcon} size={28} />
+      <p className={css.logoText}>LearnLingo</p>
     </div>
   );
 }

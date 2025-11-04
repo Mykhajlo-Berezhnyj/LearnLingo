@@ -1,3 +1,5 @@
-.LogoIcon {
-  width: 28px;
+.logoText {
+  font-weight: var(--fw-medium);
+  font-size: 20px;
+  line-height: 1.2;
 }

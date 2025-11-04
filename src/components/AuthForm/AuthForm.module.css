@@ -69,3 +69,41 @@ input {
   left: 16px;
   color: red;
 }
+
+.radioWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 198px;
+  height: 184px;
+}
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.radioOption {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: var(--fw-regular);
+  line-height: 1.375;
+  letter-spacing: 0;
+}
+
+.checked {
+  fill: var(--color-primary);
+  stroke: var(--color-primary);
+  color: red;
+}

@@ -1,162 +1,173 @@
 import { create } from "zustand";
-import {
-  getDatabase,
-  ref,
-  query,
-  orderByKey,
-  limitToFirst,
-  startAfter,
-  get as getFromDB,
-} from "firebase/database";
 import type { Teacher } from "../../../types/teacher";
 import type { Filters } from "../../../types/filters";
+import { getPaginatedTeachers } from "../../utils/pagination/getPaginatedTeachers";
+import { useAuthStore } from "./authStore";
+import {
+  fetchFavorites,
+  removeFavorite,
+  saveFavorite,
+} from "../../service/favoritesService";
+import { getAllTeachers } from "../../utils/pagination/getAllTeachers";
 
 interface TeachersStore {
   teachers: Teacher[];
-  favorites: string[];
   filters: Filters;
   sortBy: "rating" | "price";
   page: number;
+  lastKey: string | null;
   isEndReached: boolean;
   isLoading: boolean;
+
+  favorites: string[];
+  favoriteTeachers: Teacher[];
+  favoritePage: number;
+  favoritePageSize: number;
+
+  userId: string | null;
+
+  setUserId: (id: string) => void;
   setFilters: (filters: Partial<Filters>) => void;
   clearFilters: () => void;
-  toggleFavorite: (id: string) => void;
   setSortBy: (sort: "rating" | "price") => void;
-  loadInitial: () => Promise<void>;
-  loadMore: () => Promise<void>;
+
+  setFavorites: (ids: string[]) => void;
+  setFavoriteTeachers: (teachers: Teacher[]) => void;
+  setFavoritePage: (page: number) => void;
+  resetFavoritePage: () => void;
+  getVisibleFavorites: () => Teacher[];
+
+  toggleFavorite: (id: string) => Promise<void>;
+  loadTeachers: (page?: number) => Promise<void>;
+  loadFavoriteTeachers: () => Promise<void>;
+  resetTeachers: () => void;
+  resetFavorites: () => void;
 }
 
-// ===== Функції фільтрації та сортування =====
-function applyFilters(list: Teacher[], filters: Filters): Teacher[] {
-  return list.filter((t) => {
-    const matchLanguage = filters.language
-      ? t.language === filters.language
-      : true;
-    const matchLevel = filters.level ? t.levels?.includes(filters.level) : true;
-    const matchPrice = filters.maxPrice
-      ? t.price_per_hour <= filters.maxPrice
-      : true;
-    return matchLanguage && matchLevel && matchPrice;
-  });
-}
-
-function applySort(list: Teacher[], sortBy: "rating" | "price"): Teacher[] {
-  return [...list].sort((a, b) => {
-    if (sortBy === "rating") return b.rating - a.rating;
-    return a.price_per_hour - b.price_per_hour;
-  });
-}
-
-// ===== Основне сховище Zustand =====
 export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
   teachers: [],
-  favorites: [],
   filters: {},
   sortBy: "rating",
-  page: 0,
+  page: 1,
+  lastKey: null,
   isEndReached: false,
   isLoading: false,
 
-  // --- Зміна фільтрів ---
+  favorites: [],
+  favoriteTeachers: [],
+  favoritePage: 1,
+  favoritePageSize: 4,
+
+  userId: null,
+  setUserId: (id) => set({ userId: id }),
+
   setFilters: (newFilters) =>
-    set((state) => ({ filters: { ...state.filters, ...newFilters } })),
+    set(() => ({
+      filters: { ...newFilters },
+      page: 1,
+      lastKey: null,
+      isEndReached: false,
+    })),
 
-  // --- Скидання фільтрів ---
-  clearFilters: () => set({ filters: {} }),
+  clearFilters: () =>
+    set({ filters: {}, page: 1, lastKey: null, isEndReached: false }),
 
-  // --- Тогл улюблених ---
-  toggleFavorite: (id) => {
-    const { favorites } = get();
-    set({
-      favorites: favorites.includes(id)
-        ? favorites.filter((f) => f !== id)
-        : [...favorites, id],
-    });
-  },
-
-  // --- Встановлення сортування ---
   setSortBy: (sort) => set({ sortBy: sort }),
 
-  // --- Завантаження першої сторінки ---
-  async loadInitial() {
-    set({ isLoading: true });
+  setFavorites: (ids) => set({ favorites: ids }),
+  setFavoriteTeachers: (teachers) => set({ favoriteTeachers: teachers }),
+  setFavoritePage: (page) => set({ favoritePage: page }),
+  resetFavoritePage: () => set({ favoritePage: 1 }),
 
-    const { filters, sortBy } = get();
-    const db = getDatabase();
-    const q = query(ref(db, "teachers"), orderByKey(), limitToFirst(4));
-
-    const snapshot = await getFromDB(q);
-    const raw = snapshot.val();
-
-    if (!raw) {
-      set({ teachers: [], isEndReached: true, isLoading: false });
-      return;
-    }
-
-    const list = Object.entries(raw).map(([id, value]: [string, any]) => ({
-      id,
-      ...value,
-      avatar_url: value.avatar_url || "/images/defaultAvatar.png",
-      languages: value.languages ? Object.values(value.languages) : [],
-      conditions: value.conditions ? Object.values(value.conditions) : [],
-      reviews: value.reviews ? Object.values(value.reviews) : [],
-      levels: value.levels ? Object.values(value.levels) : [],
-    }));
-
-    const filtered = applyFilters(list, filters);
-    const sorted = applySort(filtered, sortBy);
-
-    set({
-      teachers: sorted,
-      page: 1,
-      isEndReached: sorted.length < 4,
-      isLoading: false,
-    });
+  getVisibleFavorites: () => {
+    const { favoriteTeachers, favoritePage, favoritePageSize } = get();
+    return favoriteTeachers.slice(0, favoritePage * favoritePageSize);
   },
 
-  // --- Довантаження наступної сторінки ---
-  async loadMore() {
-    const { teachers, filters, sortBy, page, isEndReached } = get();
-    if (isEndReached || teachers.length === 0) return;
+  toggleFavorite: async (id) => {
+    const { favorites, favoriteTeachers } = get();
+    const userId = useAuthStore.getState().user?.uid;
+    if (!userId) return;
+
+    const isAlreadyFavorite = favorites.includes(id);
+    const updatedFavorites = isAlreadyFavorite
+      ? favorites.filter((f) => f !== id)
+      : [...favorites, id];
+
+    set({ favorites: updatedFavorites });
+
+    try {
+      if (isAlreadyFavorite) {
+        await removeFavorite(userId, id);
+        set({
+          favoriteTeachers: favoriteTeachers.filter((t) => t.id !== id),
+        });
+      } else {
+        await saveFavorite(userId, id);
+        const snapshot = await getAllTeachers();
+        const found = snapshot.find((t) => t.id === id);
+        if (found) {
+          set({ favoriteTeachers: [...favoriteTeachers, found] });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to update favorites in DB:", error);
+    }
+  },
+
+  loadFavoriteTeachers: async () => {
+    const userId = useAuthStore.getState().user?.uid;
+    if (!userId) return;
+
+    try {
+      const ids = await fetchFavorites(userId);
+      set({ favorites: ids });
+
+      const allTeachers = await getAllTeachers();
+      const matched = allTeachers.filter((t) => ids.includes(t.id));
+      set({ favoriteTeachers: matched });
+    } catch (error) {
+      console.error("Failed to load favorite teachers:", error);
+    }
+  },
+
+  loadTeachers: async (page = 1) => {
+    const { filters, sortBy, lastKey, teachers, isLoading, isEndReached } =
+      get();
+    if (isLoading) return;
 
     set({ isLoading: true });
 
-    const lastKey = teachers.at(-1)?.id;
-    const db = getDatabase();
-    const q = query(
-      ref(db, "teachers"),
-      orderByKey(),
-      startAfter(lastKey),
-      limitToFirst(4)
+    const result = await getPaginatedTeachers(
+      filters,
+      lastKey,
+      4,
+      sortBy,
+      isEndReached
     );
 
-    const snapshot = await getFromDB(q);
-    const raw = snapshot.val();
-
-    if (!raw) {
-      set({ isEndReached: true, isLoading: false });
-      return;
-    }
-
-    const list = Object.entries(raw).map(([id, value]: [string, any]) => ({
-      id,
-      ...value,
-      avatar_url: value.avatar_url || "/images/defaultAvatar.png",
-      languages: value.languages ? Object.values(value.languages) : [],
-      conditions: value.conditions ? Object.values(value.conditions) : [],
-      reviews: value.reviews ? Object.values(value.reviews) : [],
-      levels: value.levels ? Object.values(value.levels) : [],
-    }));
-
-    const filtered = applyFilters(list, filters);
-    const sorted = applySort(filtered, sortBy);
-
     set({
-      teachers: [...teachers, ...sorted],
-      page: page + 1,
-      isEndReached: filtered.length < 4,
+      teachers:
+        page === 1 ? result.teachers : [...teachers, ...result.teachers],
+      lastKey: result.lastKey,
+      isEndReached: result.isEndReached,
+      page,
       isLoading: false,
     });
   },
+
+  resetTeachers: () =>
+    set({
+      teachers: [],
+      page: 1,
+      lastKey: null,
+      isEndReached: false,
+    }),
+
+  resetFavorites: () =>
+    set({
+      favorites: [],
+      favoriteTeachers: [],
+      favoritePage: 1,
+    }),
 }));

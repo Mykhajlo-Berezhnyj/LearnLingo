@@ -1,25 +1,37 @@
-import { useEffect } from "react";
-import { usePaginatedTeachersStore } from "../zustand/stores/teachers";
-import TeacherCard from "../TeacherCard/TeacherCard ";
 import css from "./TeachersList.module.css";
 import Button from "../Button/Button";
+import TeacherCard from "../TeacherCard/TeacherCard";
+import type { Teacher } from "../../types/teacher";
 
-export default function TeachersList({ className }: { className: string }) {
-  const { teachers, isLoading, isEndReached, loadInitial, loadMore } =
-    usePaginatedTeachersStore();
+interface Props {
+  className?: string;
+  teachers: Teacher[];
+  isLoading: boolean;
+  isEndReached: boolean;
+  page: number;
+  onLoadMore: (nextPage: number) => void;
+  emptyMessage?: string;
+}
 
-  useEffect(() => {
-    loadInitial();
-  }, [loadInitial]);
-
+export default function TeachersList({
+  className,
+  teachers,
+  isLoading,
+  isEndReached,
+  page,
+  onLoadMore,
+  emptyMessage = "No teachers found.",
+}: Props) {
   return (
     <section className={className}>
       <ul className={css.teachersList}>
-        {teachers.map((teacher) => (
-          <li key={teacher.id} className={css.teacherItem}>
-            <TeacherCard teacher={teacher} />
-          </li>
-        ))}
+        {teachers.map((teacher) => {
+          return (
+            <li key={teacher.id} className={css.teacherItem}>
+              <TeacherCard teacher={teacher} />
+            </li>
+          );
+        })}
       </ul>
 
       {isLoading && <p className={css.loader}>Loading...</p>}
@@ -27,8 +39,8 @@ export default function TeachersList({ className }: { className: string }) {
       {!isEndReached && !isLoading && (
         <Button
           className={css.loadMoreBtn}
-          color={"btnPrimary"}
-          onClick={loadMore}
+          color="btnPrimary"
+          onClick={() => onLoadMore(page + 1)}
           disabled={isLoading}
         >
           Load more
@@ -37,6 +49,10 @@ export default function TeachersList({ className }: { className: string }) {
 
       {isEndReached && teachers.length > 0 && (
         <p className={css.endMessage}>No more teachers available.</p>
+      )}
+
+      {isEndReached && teachers.length === 0 && (
+        <p className={css.emptyMessage}>{emptyMessage}</p>
       )}
     </section>
   );

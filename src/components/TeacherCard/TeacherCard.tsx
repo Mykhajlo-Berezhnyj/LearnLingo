@@ -4,6 +4,8 @@ import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import css from "./TeacherCard.module.css";
 import TeacherCardMore from "./TeacherCardMore/TeacherCardMore";
+import BtnFavorit from "../Button/BtnFavorit/BtnFavorit";
+import BtnTrialLesson from "../Button/BtnTrialLesson/BtnTrialLesson";
 
 export default function TeacherCard({ teacher }: { teacher: Teacher }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -28,27 +30,32 @@ export default function TeacherCard({ teacher }: { teacher: Teacher }) {
                 </h3>
               </div>
 
-              <ul className={css.statInfoList}>
-                <li className={css.statInfoItem}>
-                  <Icon className="css.book" iconName={"book"} size={16} />
-                  <p className={css.statinfoText}>Lessons online</p>
-                </li>
-                <li className={css.statInfoItem}>
-                  <p className={css.statinfoText}>
-                    Lessons done: {teacher.lessons_done}
-                  </p>
-                </li>
-                <li className={css.statInfoItem}>
-                  <Icon iconName={"star"} size={16} />
-                  <p className={css.statinfoText}> Rating: {teacher.rating}</p>
-                </li>
-                <li className={css.statInfoItem}>
-                  <p className={css.statinfoPrice}>
-                    Price / 1 hour: {teacher.price_per_hour}
-                  </p>
-                </li>
-              </ul>
-              <Button className={css.btnFavorit} />
+              <div className={css.headerUp}>
+                <ul className={css.statInfoList}>
+                  <li className={css.statInfoItem}>
+                    <Icon className={css.book} iconName={"book"} size={16} />
+                    <p className={css.statinfoText}>Lessons online</p>
+                  </li>
+                  <li className={css.statInfoItem}>
+                    <p className={css.statinfoText}>
+                      Lessons done: {teacher.lessons_done}
+                    </p>
+                  </li>
+                  <li className={css.statInfoItem}>
+                    <Icon iconName={"icon-star"} size={16} />
+                    <p className={css.statinfoText}>
+                      {" "}
+                      Rating: {teacher.rating}
+                    </p>
+                  </li>
+                  <li className={css.statInfoItem}>
+                    <p className={css.statinfoPrice}>
+                      Price / 1 hour: {teacher.price_per_hour}$
+                    </p>
+                  </li>
+                </ul>
+                <BtnFavorit teacher={teacher} className={css.btnFavorit} />
+              </div>
             </header>
             <dl className={css.baseInfo}>
               <div className={css.rowInfo}>
@@ -87,6 +94,7 @@ export default function TeacherCard({ teacher }: { teacher: Teacher }) {
             </li>
           ))}
         </ul>
+        {isExpanded && <BtnTrialLesson className={css.btnTrial} />}
       </div>
     </article>
   );

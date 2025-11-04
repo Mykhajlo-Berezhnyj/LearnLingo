@@ -8,23 +8,31 @@ import InputField from "../InputField/InputField";
 import PasswordField from "../PasswordField/PasswordField";
 import toast from "react-hot-toast";
 import type { User } from "firebase/auth";
+import Icon from "../Icon/Icon";
+import { useAuthStore } from "../zustand/stores/authStore";
 
 export interface FieldConfig<T> {
   name: Path<T>;
-  type?: string;
+  type?: "text" | "email" | "password" | "checkbox" | "select" | "radio";
   placeholder: string;
   autoComplete?: string;
+  options?: { label: string; value: string }[];
 }
 
-interface AuthFormProps<TSchema extends ObjectSchema<AnyObject>> {
+interface AuthFormProps<
+  TSchema extends ObjectSchema<AnyObject>,
+  TResult = void
+> {
   schema: TSchema;
-  sendToBackend: (data: InferType<TSchema>) => Promise<User>;
+  sendToBackend: (data: InferType<TSchema>) => Promise<TResult>;
   titleForm: string;
   textForm: string;
   fields: FieldConfig<InferType<TSchema>>[];
   btnLabel: string;
   onSuccess?: (user: User) => void;
   successMessage?: ((user: User) => string) | string;
+  otherContent1?: React.ReactNode;
+  otherContent2?: React.ReactNode;
 }
 
 export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
@@ -36,6 +44,8 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
   fields,
   successMessage,
   onSuccess,
+  otherContent1,
+  otherContent2,
 }: AuthFormProps<TSchema>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,16 +55,19 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     shouldFocusError: true,
   });
 
+  const user = useAuthStore.getState().user;
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      const user = await sendToBackend(data);
+      await sendToBackend(data);
       console.log(" Sent to backend:", data);
 
       const message =
@@ -80,9 +93,9 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
         <h3 className={css.titleForm}>{titleForm}</h3>
         <p className={css.textForm}>{textForm}</p>
       </div>
-
+      {otherContent1}
       <div className={css.inputWrap}>
-        {fields.map(({ name, type, ...rest }) => {
+        {fields.map(({ name, type, options, ...rest }) => {
           const errorMessage = errors[name]?.message as string | undefined;
 
           if (type === "password") {
@@ -95,6 +108,68 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
                 placeholder={rest.placeholder}
                 className={css.inputWrapper}
               />
+            );
+          }
+
+          if (type === "checkbox") {
+            return (
+              <label key={name} className={css.checkboxWrapper}>
+                <input type="checkbox" {...register(name)} />
+                {rest.placeholder}
+                {errorMessage && (
+                  <span className={css.error}>{errorMessage}</span>
+                )}
+              </label>
+            );
+          }
+          if (type === "select" && options) {
+            return (
+              <div key={name} className={css.inputWrapper}>
+                <select {...register(name)}>
+                  {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+                {errorMessage && (
+                  <span className={css.error}>{errorMessage}</span>
+                )}
+              </div>
+            );
+          }
+
+          if (type === "radio" && options) {
+            const selectedValue = watch(name);
+            return (
+              <div key={name} className={css.radioWrap}>
+                <h4 className={css.radioLabel}>{rest.placeholder}</h4>
+                <div key={name} className={css.radioGroup}>
+                  {options.map((opt) => (
+                    <label key={opt.value} className={css.radioOption}>
+                      <input
+                        type="radio"
+                        value={opt.value}
+                        {...register(name)}
+                        className={css.hiddenRadio}
+                      />
+                      {selectedValue === opt.value ? (
+                        <Icon
+                          iconName={"radio-checked"}
+                          size={24}
+                          className={css.checked}
+                        />
+                      ) : (
+                        <Icon iconName={"radio"} size={24} />
+                      )}
+                      <span>{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+                {errorMessage && (
+                  <span className={css.error}>{errorMessage}</span>
+                )}
+              </div>
             );
           }
 
@@ -111,7 +186,6 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
           );
         })}
       </div>
-
       <Button
         type="submit"
         className={css.btnForm}
@@ -120,6 +194,7 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
       >
         {isSubmitting ? "Sending..." : btnLabel}
       </Button>
+      {otherContent2}
     </form>
   );
 }

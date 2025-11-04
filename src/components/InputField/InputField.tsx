@@ -26,6 +26,7 @@ export default function InputField<T extends FieldValues>({
   return (
     <div className={className}>
       <input
+        className={error ? css.errorInput : undefined}
         {...register(name)}
         type={type}
         placeholder={placeholder}

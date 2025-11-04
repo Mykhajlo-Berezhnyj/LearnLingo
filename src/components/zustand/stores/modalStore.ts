@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "login" | "register" | null;
+export type ModalType = "login" | "register" | "trial" | "authRequired" | null;
 
 interface ModalState {
   modalType: ModalType;
