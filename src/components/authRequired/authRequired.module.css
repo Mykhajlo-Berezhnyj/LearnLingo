@@ -1,0 +1,16 @@
+.authRequired {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.authButtons {
+  display: flex;
+  gap: 20px;
+}
+
+.btnAuth {
+  width: 150px;
+  height: 46px;
+}

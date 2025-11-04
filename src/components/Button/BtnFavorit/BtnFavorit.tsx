@@ -24,7 +24,7 @@ export default function BtnFavorit({
 
   const handleFavorite = async () => {
     if (!user?.uid) {
-      setModalType("register");
+      setModalType("authRequired");
       return;
     }
     try {

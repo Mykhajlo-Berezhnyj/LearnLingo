@@ -62,14 +62,12 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
     shouldFocusError: true,
   });
 
-  const user = useAuthStore.getState().user;
-
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
       await sendToBackend(data);
       console.log(" Sent to backend:", data);
-
+      const user = useAuthStore.getState().user;
       const message =
         typeof successMessage === "function"
           ? successMessage(user)
@@ -80,7 +78,7 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
       onSuccess?.(user);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        toast.error(`Помилка: ${err.message}`);
+        toast.error(`Error: ${err.message}`);
       }
     } finally {
       setIsSubmitting(false);
