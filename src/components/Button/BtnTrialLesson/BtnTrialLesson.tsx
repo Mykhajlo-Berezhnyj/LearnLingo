@@ -9,11 +9,6 @@ export default function BtnTrialLesson({ className }: { className?: string }) {
   const user = useAuthStore((store) => store.user);
   const { modalType, setModalType, closeModal } = useModalStore();
 
-  //   if (user === null) {
-  //     setModalType("authRequired");
-  //     return;
-  //   }
-
   return (
     <>
       <Button

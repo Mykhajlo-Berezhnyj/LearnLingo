@@ -102,8 +102,6 @@ export async function getPaginatedTeachers(
   const paginated = sorted.slice(0, pageSize);
   const newLastKey = paginated.length > 0 ? paginated.at(-1)!.id : null;
 
-  console.log("🚀 ~ getPaginatedTeachers ~ lastKey:", newLastKey);
-
   return {
     teachers: paginated,
     lastKey: newLastKey,

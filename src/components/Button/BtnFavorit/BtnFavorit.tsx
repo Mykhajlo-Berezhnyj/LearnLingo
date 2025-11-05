@@ -36,7 +36,6 @@ export default function BtnFavorit({
       );
     } catch (error) {
       toast.error("Failed to update favorites");
-      console.error("toggleFavorite error:", error);
     }
   };
 

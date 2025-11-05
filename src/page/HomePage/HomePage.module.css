@@ -1,4 +1,5 @@
 .hero {
+  padding-bottom: 32px;
 }
 
 .hero-container {
@@ -7,6 +8,11 @@
   grid-template-areas:
     "banner img"
     "advantages advantages";
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    padding: 0 64px;
+  }
 }
 
 .banners {

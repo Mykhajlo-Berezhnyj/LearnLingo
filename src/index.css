@@ -171,6 +171,7 @@ h1 {
   font-size: var(--fs-h1);
   font-weight: var(--fw-medium);
   line-height: calc(56 / 48);
+  letter-spacing: -0.022rem;
 }
 
 h2 {

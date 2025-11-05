@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import type { User } from "firebase/auth";
 import Icon from "../Icon/Icon";
 import { useAuthStore } from "../zustand/stores/authStore";
+import { handleFirebaseError } from "../utils/handleFirebaseError";
 
 export interface FieldConfig<T> {
   name: Path<T>;
@@ -69,7 +70,6 @@ export default function AuthForm<
     setIsSubmitting(true);
     try {
       const result = await sendToBackend(data);
-      console.log(" Sent to backend:", data);
       const user = useAuthStore.getState().user;
       const message =
         typeof successMessage === "function"
@@ -80,9 +80,7 @@ export default function AuthForm<
       reset();
       onSuccess?.(user);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        toast.error(`Error: ${err.message}`);
-      }
+      handleFirebaseError(err);
     } finally {
       setIsSubmitting(false);
     }

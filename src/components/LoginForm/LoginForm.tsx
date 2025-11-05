@@ -27,7 +27,6 @@ export default function LoginForm() {
         `Log In successful! Welcome back, ${user.displayName ?? "user"}!`
       }
       onSuccess={(user) => {
-        console.log("User log In:", user);
         closeModal();
       }}
       fields={fields}

@@ -14,7 +14,7 @@ function App() {
 
   return (
     <>
-      <AppBar />
+      <AppBar className="header" />
 
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>

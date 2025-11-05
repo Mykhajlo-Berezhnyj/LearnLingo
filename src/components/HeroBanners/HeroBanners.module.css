@@ -1,11 +1,12 @@
 .banner-span {
   background: var(--color-secondary);
   font-style: italic;
-  font-weight: var(--fw-normal);
+  font-weight: var(--fw-regular);
 }
 
 .banner-text {
   max-width: 471px;
+  line-height: 1.375;
 }
 
 .btnHero {

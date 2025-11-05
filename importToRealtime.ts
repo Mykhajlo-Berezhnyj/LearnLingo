@@ -32,7 +32,6 @@ function transformTeacherData(raw: Record<string, any>) {
 async function importToRealtime() {
   const transformed = transformTeacherData(raw);
   await set(ref(rtdb, "teachers"), transformed);
-  console.log("✅ Data imported to Realtime DB");
 }
 
 importToRealtime();

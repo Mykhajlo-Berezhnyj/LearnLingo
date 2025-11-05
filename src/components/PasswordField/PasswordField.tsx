@@ -28,6 +28,7 @@ export default function PasswordField<T extends FieldValues>({
   return (
     <div className={className}>
       <input
+        className={error ? css.errorInput : undefined}
         {...register(name)}
         type={showPassword ? "text" : "password"}
         placeholder={placeholder}

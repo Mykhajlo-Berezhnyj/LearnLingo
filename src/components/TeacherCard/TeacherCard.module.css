@@ -1,10 +1,19 @@
 .teacherCard {
+  position: relative;
   display: flex;
-  padding: 24px;
-  gap: 48px;
-  line-height: var(-lh-second);
+  flex-direction: column;
+  padding: 16px;
+  gap: 24px;
+  line-height: var(--lh-second);
   font-weight: var(--fw-medium);
   letter-spacing: 0;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    padding: 24px;
+    gap: 48px;
+  }
 }
 
 .thumb {
@@ -46,7 +55,7 @@
   flex-direction: column;
   gap: 32px;
   width: 100%;
-  max-width: 968px;
+  max-width: clamp(650px, 80vw, 968px);
 }
 
 .blocks {
@@ -54,12 +63,14 @@
   flex-direction: column;
   gap: 16px;
   align-items: flex-start;
+  width: 100%;
 }
 
 .block {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  width: 100%;
 }
 
 .headerCard {
@@ -71,7 +82,7 @@
 .headerInfo {
   display: flex;
   flex-direction: column;
-  height: 56px;
+  /* height: 56px; */
   gap: 8px;
 }
 
@@ -82,24 +93,39 @@
 
 .titleheader {
   height: 24px;
-  text-wrap: nowrap;
+  text-wrap: wrap;
   align-content: center;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  @media (min-width: 768px) {
+    position: static;
+    text-wrap: nowrap;
+    margin-right: 10px;
+  }
 }
 
 .headerUp {
   display: flex;
-  height: 26px;
+  /* height: 26px; */
   gap: 64px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .statInfoList {
   display: flex;
-  height: 24px;
-  gap: 32px;
+  flex-wrap: wrap;
+  /* height: 24px; */
+  column-gap: 32px;
+  align-items: flex-end;
+  margin-block: 1px;
+  row-gap: 8px;
   align-items: center;
   letter-spacing: 0;
   line-height: 1.5;
+  text-wrap: nowrap;
+  justify-content: flex-end;
 }
 
 .statInfoList > *:not(:nth-last-child(-n + 1))::after {
@@ -132,6 +158,13 @@
 
 .btnFavorit {
   stroke: var(--color-font-main);
+  position: absolute;
+  top: 108px;
+  right: 12px;
+
+  @media (min-width: 768px) {
+    position: static;
+  }
 }
 
 .baseInfo {
@@ -161,6 +194,7 @@
 .baseInfoDt {
   color: var(--color-font-second);
   height: 24px;
+  text-wrap: nowrap;
 }
 
 .readMore {
@@ -175,6 +209,7 @@
 
 .levelList {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }
@@ -190,6 +225,7 @@
   font-weight: var(--fw-medium);
   line-height: var(--lh-middle);
   letter-spacing: 0;
+  text-wrap: nowrap;
 }
 
 .levelList li:first-child {

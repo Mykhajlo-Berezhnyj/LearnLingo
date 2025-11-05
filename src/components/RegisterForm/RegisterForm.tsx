@@ -27,7 +27,6 @@ export default function RegistrationForm() {
         `Registration successful! Welcome, ${user.displayName ?? "user"}!`
       }
       onSuccess={(user) => {
-        console.log("User created:", user);
         closeModal();
       }}
       fields={fields}

@@ -6,4 +6,4 @@ const teachersObject = Object.fromEntries(
 );
 
 fs.writeFileSync("teachers.json", JSON.stringify(teachersObject, null, 2));
-console.log("✅ teachers.json створено");
+c;

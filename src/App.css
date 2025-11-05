@@ -1,5 +1,5 @@
 #root {
-  max-width: 1440px;
+  width: 100%;
   margin: 0 auto;
   padding: 0;
 }
@@ -32,10 +32,8 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
 }

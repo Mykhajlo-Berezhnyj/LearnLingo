@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import TeachersList from "../../components/TeachersList/TeachersList";
+import TeachersSection from "../../components/TeachersSection/TeachersSection";
 import css from "./Teachers.module.css";
 import { usePaginatedTeachersStore } from "../../components/zustand/stores/teachers";
 
@@ -18,7 +18,7 @@ export default function Teachers() {
   }, []);
 
   return (
-    <TeachersList
+    <TeachersSection
       className={css.teachers}
       teachers={teachers}
       isLoading={isLoading}

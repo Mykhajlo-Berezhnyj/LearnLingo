@@ -6,11 +6,11 @@ import css from "./AppBar.module.css";
 import { useAuthStore } from "../zustand/stores/authStore";
 import UserMenu from "../UserMenu/UserMenu";
 
-export default function AppBar() {
+export default function AppBar({ className }: { className?: string }) {
   const { user } = useAuthStore();
 
   return (
-    <header className="header">
+    <header className={className}>
       <Container className={css.headerContainer}>
         <Logo className={css.logoWrap} />
         <NavBar className={css.navBar} />

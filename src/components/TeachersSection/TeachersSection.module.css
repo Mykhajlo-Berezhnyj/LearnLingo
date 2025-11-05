@@ -1,0 +1,17 @@
+.teachersList {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.loadMoreBtn {
+  width: 183px;
+  height: 60px;
+  border-radius: 12px;
+  padding-top: 16px;
+  padding-right: 48px;
+  padding-bottom: 16px;
+  padding-left: 48px;
+  margin-top: 32px;
+}
