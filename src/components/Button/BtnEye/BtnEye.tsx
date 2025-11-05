@@ -1,6 +1,6 @@
 import Button from "../Button";
 import Icon from "../../Icon/Icon";
-import css from "./btnEye.module.css";
+import css from "./BtnEye.module.css";
 
 interface BtnEyeProps {
   showPassword: boolean;
