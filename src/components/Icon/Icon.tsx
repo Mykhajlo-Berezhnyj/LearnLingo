@@ -3,7 +3,11 @@ import type { ComponentType } from "react";
 type IconProps = {
   className?: string;
   iconName?: string;
-  SvgComponent?: ComponentType<{ className?: string }>;
+  SvgComponent?: ComponentType<{
+    className?: string;
+    width?: number;
+    height?: number;
+  }>;
   src?: string;
   width?: number;
   height?: number;

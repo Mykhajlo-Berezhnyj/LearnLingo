@@ -1,3 +1,4 @@
+import type { User } from "firebase/auth";
 import type { FieldConfig } from "../AuthForm/AuthForm";
 import AuthForm from "../AuthForm/AuthForm";
 import { useAuthActions } from "../service/useAuthActions";
@@ -14,7 +15,7 @@ export default function LoginForm() {
   const { login } = useAuthActions();
 
   return (
-    <AuthForm
+    <AuthForm<typeof loginSchema, User>
       sendToBackend={login}
       schema={loginSchema}
       titleForm={"Log In"}

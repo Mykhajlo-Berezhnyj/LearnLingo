@@ -25,7 +25,7 @@ const fields: FieldConfig<TrialData>[] = [
 
 export default function BookTrialLessonForm() {
   const { setModalType, closeModal } = useModalStore();
-  const { user } = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   if (user === null) {
     setModalType("authRequired");

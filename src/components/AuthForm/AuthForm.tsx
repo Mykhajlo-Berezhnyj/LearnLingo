@@ -35,7 +35,10 @@ interface AuthFormProps<
   otherContent2?: React.ReactNode;
 }
 
-export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
+export default function AuthForm<
+  TSchema extends ObjectSchema<AnyObject>,
+  TResult = void
+>({
   sendToBackend,
   schema,
   titleForm,
@@ -46,7 +49,7 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
   onSuccess,
   otherContent1,
   otherContent2,
-}: AuthFormProps<TSchema>) {
+}: AuthFormProps<TSchema, TResult>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   type FormData = InferType<TSchema>;
@@ -65,7 +68,7 @@ export default function AuthForm<TSchema extends ObjectSchema<AnyObject>>({
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      await sendToBackend(data);
+      const result = await sendToBackend(data);
       console.log(" Sent to backend:", data);
       const user = useAuthStore.getState().user;
       const message =

@@ -1,73 +1,133 @@
-# React + TypeScript + Vite
+Learn Lingo Language Tutors App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive web application for a company that connects users with experienced language tutors for online learning.
+Built with React, Firebase, and React Hook Form, the app allows users to browse tutors, book trial lessons, and manage favorite teachers.
 
-Currently, two official plugins are available:
+🚀 Features
+🏠 Home Page
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Displays key advantages of the company.
 
-## React Compiler
+Includes a “Get Started” link that redirects to the Teachers page.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Styled according to the design mockup (or custom color variations).
 
-## Expanding the ESLint configuration
+👩‍🏫 Teachers Page
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Displays a list of tutors fetched from Firebase Realtime Database.
+Supports filtering by(in progress):
+Language taught
+Student level
+Price per hour
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Loads 4 cards at a time with a “Load more” button to fetch additional tutors.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+❤️ Favorites Page (Private)
+Accessible only for authorized users.
+Displays tutors added to the user’s Favorites.
+Favorites persist even after page refresh using Firebase or localStorage.
+Removing a favorite updates the UI and data instantly.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🔐 Authentication (Firebase)
+Implemented using Firebase Authentication:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Sign Up / Log In / Log Out
+Get current user
+Protected routes (Favorites page)
+Auth state is stored in a Zustand store for global access.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+🧾 Forms and Validation
+All forms use React Hook Form and Yup for validation:
+Registration Form
+Login Form
+Book Trial Lesson Form
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Each field is required and provides real-time validation messages.
+Forms reset after successful submission.
+
+💬 Modal Windows
+The application includes several modals:
+Login Modal – for user sign-in
+Registration Modal – for account creation
+Book Trial Lesson Modal – for scheduling a trial session
+AuthRequired Modal – shown when an unauthenticated user tries to access a restricted feature
+
+
+All modals can be closed by:
+Clicking the close button 
+Clicking the backdrop
+Pressing the Esc key
+
+🧠 Firebase Database Structure
+Collection: teachers
+
+Field	Type	Description
+name	string	Teacher’s first name
+surname	string	Teacher’s last name
+languages	string[]	Languages taught
+levels	string[]	Levels taught (A1–C2)
+rating	number	Average rating
+reviews	object[]	Student reviews
+price_per_hour	number	Hourly rate
+lessons_done	number	Number of completed lessons
+avatar_url	string	Profile image
+lesson_info	string	Short description
+conditions	string	Lesson conditions
+experience	string	Teacher’s experience
+
+You can fill the collection using teachers.json.
+
+⚙️ Technologies Used
+React + Vite
+Firebase Authentication & Realtime Database
+React Router
+Zustand (state management)
+React Hook Form + Yup (form validation)
+React Hot Toast (notifications)
+CSS Modules (scoped styling)
+TypeScript
+
+🧩 Project Structure
+src/
+├── components/
+│   ├── AuthBar/
+│   ├── AuthForm/
+│   ├── AuthMenu/
+│   ├── BookTrialLessonForm/
+│   ├── Button/
+│   ├── Container/
+│   ├── HeroBanners/
+│   ├── HeroImg/
+│   ├── Icon/
+│   ├── Imac/
+│   ├── InputField/
+│   ├── Logo/
+│   ├── LoginForm/
+│   ├── Modal/
+│   ├── NavBar/
+│   ├── RegisterForm/
+│   ├── service/
+│   ├── TeacherCard/
+│   ├── TeacherList/
+│   ├── UserMenu/
+│   └── Icon/
+├── pages/
+│   ├── Home/
+│   ├── Teachers/
+│   └── Favorites/
+├── zustand/
+│   ├── stores/
+├── service/
+│   ├── firebase.ts
+│   └── useAuthActions.ts
+└── validation/
+    ├── validation.ts
+    └── passwordSchema.ts
+
+🌐 Deployment
+
+The app can be deployed using:
+
+GitHub Pages: https://github.com/Mykhajlo-Berezhnyj/LearnLingo.git
+
+Netlify:

@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import { passwordSchema } from "./passwordSchema";
-import { off } from "process";
 
 export const registrationSchema = yup
   .object({
@@ -52,7 +51,7 @@ export const trialSchema = yup.object({
   PhoneNumber: yup
     .string()
     .trim()
-    .matches(/^\+?[0-9\s\-]{7,15}$/, "Must be a valid phone number")
+    .matches(/^\+?[0-9\s-]{7,15}$/, "Must be a valid phone number")
     .required("Phone number is required"),
 });
 
