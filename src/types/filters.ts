@@ -1,5 +1,5 @@
 export type Filters = {
   language?: string;
   level?: string;
-  maxPrice?: number;
+  price_per_hour?: number;
 };

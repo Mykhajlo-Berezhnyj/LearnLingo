@@ -5,15 +5,14 @@ import {
   orderByKey,
   orderByChild,
   equalTo,
-  startAt,
   limitToFirst,
+  startAt,
+  endAt,
   get as getFromDB,
 } from "firebase/database";
 import type { Filters } from "../../../types/filters";
 import type { TeacherRaw, Teacher } from "../../../types/teacher";
 import { applyFilters } from "../filtering/applyFilters";
-import { applySort } from "../filtering/applySort";
-import { shouldEnableFrontendSorting } from "../filtering/shouldEnableFrontendSorting";
 
 interface PaginatedResult {
   teachers: Teacher[];
@@ -24,17 +23,15 @@ interface PaginatedResult {
 export async function getPaginatedTeachers(
   filters: Filters,
   lastKey: string | null = null,
-  pageSize = 4,
-  sortBy: "rating" | "price" = "rating",
-  isEndReached: boolean
+  pageSize = 4
 ): Promise<PaginatedResult> {
   const db = getDatabase();
   const activeFilters = Object.entries(filters).filter(([_, v]) => v != null);
-  const isBackendPagination = activeFilters.length <= 1;
-
   let q;
+  const hasNoFilters = activeFilters.length === 0;
+  // const hasSingleFilter = activeFilters.length === 1;
 
-  if (activeFilters.length === 0) {
+  if (hasNoFilters) {
     q = lastKey
       ? query(
           ref(db, "teachers"),
@@ -43,39 +40,35 @@ export async function getPaginatedTeachers(
           limitToFirst(pageSize + 1)
         )
       : query(ref(db, "teachers"), orderByKey(), limitToFirst(pageSize));
-  } else if (isBackendPagination) {
-    const [key, value] = activeFilters[0];
-    const path = key === "language" ? `languages/${value}` : `levels/${value}`;
-    q = lastKey
-      ? query(
-          ref(db, "teachers"),
-          orderByChild(path),
-          equalTo(true),
-          startAt(lastKey),
-          limitToFirst(pageSize + 1)
-        )
-      : query(
-          ref(db, "teachers"),
-          orderByChild(path),
-          equalTo(true),
-          limitToFirst(pageSize)
-        );
   } else {
-    const path = filters.language
-      ? `languages/${filters.language}`
-      : "teachers";
-    q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
+    const [key, value] = activeFilters[0];
+    let path;
+    if (key === "language") {
+      path = `languages/${value}`;
+      q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
+    } else if (key === "level") {
+      path = `levels/${value}`;
+      q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
+    } else if (key === "price_per_hour") {
+      path = "price_per_hour";
+      q = query(
+        ref(db, "teachers"),
+        orderByChild("price_per_hour"),
+        endAt(value)
+      );
+    }
   }
 
   const snapshot = await getFromDB(q);
   const raw = snapshot.val();
   if (!raw) return { teachers: [], lastKey: null, isEndReached: true };
 
-  const entries = Object.entries(raw);
+  let entries = Object.entries(raw);
+  if (hasNoFilters && lastKey) {
+    entries = entries.slice(1);
+  }
 
-  const sliced = lastKey ? entries.slice(1) : entries;
-
-  const allTeachers: Teacher[] = sliced.map(
+  const allTeachers: Teacher[] = entries.map(
     ([id, value]: [string, TeacherRaw]) => ({
       id,
       ...value,
@@ -87,24 +80,24 @@ export async function getPaginatedTeachers(
     })
   );
 
-  const filtered = isBackendPagination
+  const filtered = hasNoFilters
     ? allTeachers
     : applyFilters(allTeachers, filters);
 
-  const enableFrontendSort = shouldEnableFrontendSorting(
-    filters,
-    isBackendPagination,
-    isEndReached
-  );
-
-  const sorted = enableFrontendSort ? applySort(filtered, sortBy) : filtered;
-
-  const paginated = sorted.slice(0, pageSize);
-  const newLastKey = paginated.length > 0 ? paginated.at(-1)!.id : null;
-
-  return {
-    teachers: paginated,
-    lastKey: newLastKey,
-    isEndReached: paginated.length < pageSize,
-  };
+  if (hasNoFilters) {
+    const paginated = filtered.slice(0, pageSize);
+    const newLastKey = paginated.length > 0 ? paginated.at(-1)!.id : null;
+    const isEndReached = paginated.length < pageSize;
+    return {
+      teachers: paginated,
+      lastKey: newLastKey,
+      isEndReached,
+    };
+  } else {
+    return {
+      teachers: filtered,
+      lastKey: null,
+      isEndReached: true,
+    };
+  }
 }

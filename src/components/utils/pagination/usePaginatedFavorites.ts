@@ -1,24 +1,24 @@
 import { usePaginatedTeachersStore } from "../../zustand/stores/teachers";
+import { applyFilters } from "../filtering/applyFilters";
 
 export function usePaginatedFavorites() {
   const {
+    filters,
     favoriteTeachers,
     favoritePage,
     favoritePageSize,
-    setFavoritePage,
     resetFavoritePage,
+    setFavoritePage,
   } = usePaginatedTeachersStore();
 
-  const visibleFavorites = favoriteTeachers.slice(
-    0,
-    favoritePage * favoritePageSize
-  );
-  const isEndReached = visibleFavorites.length >= favoriteTeachers.length;
+  const filtered = applyFilters(favoriteTeachers, filters);
+
+  const visibleFavorites = filtered.slice(0, favoritePage * favoritePageSize);
+
+  const isEndReached = favoritePage * favoritePageSize >= filtered.length;
 
   const loadMore = () => {
-    if (!isEndReached) {
-      setFavoritePage(favoritePage + 1);
-    }
+    if (!isEndReached) setFavoritePage(favoritePage + 1);
   };
 
   return {

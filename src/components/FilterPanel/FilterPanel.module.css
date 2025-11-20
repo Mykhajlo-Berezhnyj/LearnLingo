@@ -1,0 +1,29 @@
+.sectionFilters {
+  padding: 96px 0 0;
+}
+
+.containerFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: start;
+    width: 583px;
+  }
+}
+
+.filterLang {
+  width: 221px;
+}
+
+.filterLevel {
+  width: 198px;
+}
+
+.filterPrice {
+  width: 124px;
+}

@@ -10,7 +10,7 @@ interface Props {
   isLoading: boolean;
   isEndReached: boolean;
   page: number;
-  onLoadMore: (nextPage: number) => void;
+  onLoadMore: () => void;
   emptyMessage?: string;
 }
 
@@ -32,7 +32,7 @@ export default function TeachersSection({
           <Button
             className={css.loadMoreBtn}
             color="btnPrimary"
-            onClick={() => onLoadMore(page + 1)}
+            onClick={onLoadMore}
           >
             Load more
           </Button>

@@ -14,13 +14,14 @@ export default function Advantages({ className }: AdvantagesProps) {
         preserveAspectRatio="none"
       >
         <rect
-          x="0.75"
-          y="0.75"
-          width="1310.5"
-          height="114.5"
+          x="1.5"
+          y="1.5"
+          width="98.5%"
+          height="98.5%"
           rx="30"
           ry="30"
           fill="none"
+          vector-effect="non-scaling-stroke"
         />
       </svg>
       <ul className={css.list}>

@@ -11,8 +11,8 @@ export function applyFilters(list: Teacher[], filters: Filters): Teacher[] {
           return teacher.languages?.includes(value as string);
         case "level":
           return teacher.levels?.includes(value as string);
-        case "maxPrice":
-          return teacher.price_per_hour <= Number(value);
+        case "price_per_hour":
+          return Number(teacher.price_per_hour) <= Number(value);
         default:
           return true;
       }

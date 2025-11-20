@@ -1,0 +1,24 @@
+.selectWraper {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 8px;
+  height: 74px;
+}
+
+.txtLabel {
+  font-size: var(--fs-small);
+  color: var(--color-font-second);
+  line-height: var(--lh-big);
+}
+
+.select {
+  position: relative;
+  height: 48px;
+}
+
+.clearBtn {
+  position: absolute;
+  bottom: 14px;
+  right: 46px;
+}

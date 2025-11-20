@@ -1,23 +1,51 @@
+.advantages {
+  position: relative;
+}
+
 .list {
-  display: flex;
-  gap: 100px;
-  margin-left: 1px;
-  align-items: flex-start;
+  display: grid;
+  flex-wrap: wrap;
+  grid-template-columns: 1fr;
+  row-gap: 40px;
+  grid-auto-rows: auto;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 217px 232px 159px 159px;
+    align-items: flex-start;
+    gap: 100px;
+    height: 36px;
+    margin-left: 1px;
+  }
 }
 
 .item {
   display: flex;
   gap: 16px;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashedBorder {
   position: absolute;
   stroke-width: 1.5;
   stroke-dasharray: 15 15;
+  display: block;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 1.5px);
+  height: calc(100% - 1.5px);
   animation: dashAndColor 3s infinite linear;
+  pointer-events: none;
+}
+
+svg.dashedBorder {
+  width: calc(100% - 3px);
+  height: calc(100% - 3px);
 }
 
 .dataH2 {
@@ -28,6 +56,11 @@
   font-size: var(--fs-small);
   line-height: var(--lh-big);
   color: var(--color-font-second);
+
+  @media (min-width: 1440px) {
+    white-space: wrap;
+    max-width: 96px;
+  }
 }
 
 @keyframes dashAndColor {

@@ -108,9 +108,12 @@
 
 .headerUp {
   display: flex;
-  /* height: 26px; */
   gap: 64px;
   align-items: flex-start;
+
+  @media (min-width: 1440px) {
+    height: 26px;
+  }
 }
 
 .statInfoList {
@@ -122,8 +125,7 @@
   margin-block: 1px;
   row-gap: 8px;
   align-items: center;
-  letter-spacing: 0;
-  line-height: 1.5;
+  letter-spacing: 0.002rem;
   text-wrap: nowrap;
   justify-content: flex-end;
 }
@@ -159,6 +161,7 @@
 .btnFavorit {
   stroke: var(--color-font-main);
   position: absolute;
+  padding: 0;
   top: 108px;
   right: 12px;
 
@@ -205,6 +208,9 @@
 
 .linkMore {
   text-decoration: underline;
+  line-height: 1.5;
+  letter-spacing: 0.002rem;
+  padding: 0;
 }
 
 .levelList {
@@ -236,4 +242,6 @@
 .btnTrial {
   width: 232px;
   height: 60px;
+  font-size: var(--fs-big);
+  line-height: 1.55rem;
 }

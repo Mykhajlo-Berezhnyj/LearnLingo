@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import css from "./Modal.module.css";
 import { createPortal } from "react-dom";
 import Icon from "../Icon/Icon";
+import clsx from "clsx";
 
 interface ModalProps {
   isOpen: boolean;
+  size?: "large" | "small";
   onClose: () => void;
   children: React.ReactNode;
 }
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function Modal({ size, isOpen, onClose, children }: ModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -17,6 +19,17 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -28,7 +41,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
 
   return createPortal(
     <div className={css.modalBackdrop} onClick={handleBackdropClick}>
-      <div className={css.modalContent}>
+      <div className={clsx(css.modalContent, size === "large" && css.large)}>
         <button onClick={onClose} className={css.btnClose}>
           <Icon iconName="close-x-icon" className={css.iconClose} />
         </button>

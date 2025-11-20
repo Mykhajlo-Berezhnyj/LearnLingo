@@ -1,9 +1,11 @@
 import type { FieldConfig } from "../AuthForm/AuthForm";
 import AuthForm from "../AuthForm/AuthForm";
 import { sendTrialRequest } from "../service/sendTrialRequest";
+import TeacherInfo from "../TeacherCard/TeacherInfo/TeacherInfo";
 import { TrialData, trialSchema } from "../validation/validation";
 import { useAuthStore } from "../zustand/stores/authStore";
 import { useModalStore } from "../zustand/stores/modalStore";
+import css from "./BookTrialLessonForm.module.css";
 
 const fields: FieldConfig<TrialData>[] = [
   {
@@ -24,7 +26,7 @@ const fields: FieldConfig<TrialData>[] = [
 ];
 
 export default function BookTrialLessonForm() {
-  const { setModalType, closeModal } = useModalStore();
+  const { setModalType, closeModal, selectedTeacher } = useModalStore();
   const user = useAuthStore((state) => state.user);
 
   if (user === null) {
@@ -34,11 +36,15 @@ export default function BookTrialLessonForm() {
 
   return (
     <AuthForm
+      className={css.trialForm}
       sendToBackend={sendTrialRequest}
       schema={trialSchema}
       titleForm={"Book trial lesson"}
       textForm={
         "Our experienced tutor will assess your current language level, discuss your learning goals, and tailor the lesson to your specific needs."
+      }
+      otherContent1={
+        <TeacherInfo className={css.teacherInfo} teacher={selectedTeacher} />
       }
       btnLabel={"Book"}
       successMessage={(user) =>

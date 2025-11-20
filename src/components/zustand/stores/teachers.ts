@@ -13,8 +13,9 @@ import { getAllTeachers } from "../../utils/pagination/getAllTeachers";
 interface TeachersStore {
   teachers: Teacher[];
   filters: Filters;
-  sortBy: "rating" | "price";
+  sortBy: "rating" | "price_per_hour";
   page: number;
+  pageSize: number;
   lastKey: string | null;
   isEndReached: boolean;
   isLoading: boolean;
@@ -29,7 +30,7 @@ interface TeachersStore {
   setUserId: (id: string) => void;
   setFilters: (filters: Partial<Filters>) => void;
   clearFilters: () => void;
-  setSortBy: (sort: "rating" | "price") => void;
+  setSortBy: (sort: "rating" | "price_per_hour") => void;
 
   setFavorites: (ids: string[]) => void;
   setFavoriteTeachers: (teachers: Teacher[]) => void;
@@ -39,6 +40,8 @@ interface TeachersStore {
 
   toggleFavorite: (id: string) => Promise<void>;
   loadTeachers: (page?: number) => Promise<void>;
+  loadMore: () => Promise<void>;
+  getVisibleTeachers: () => Teacher[];
   loadFavoriteTeachers: () => Promise<void>;
   resetTeachers: () => void;
   resetFavorites: () => void;
@@ -49,6 +52,7 @@ export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
   filters: {},
   sortBy: "rating",
   page: 1,
+  pageSize: 4,
   lastKey: null,
   isEndReached: false,
   isLoading: false,
@@ -62,8 +66,8 @@ export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
   setUserId: (id) => set({ userId: id }),
 
   setFilters: (newFilters) =>
-    set(() => ({
-      filters: { ...newFilters },
+    set((state) => ({
+      filters: { ...state.filters, ...newFilters },
       page: 1,
       lastKey: null,
       isEndReached: false,
@@ -132,28 +136,54 @@ export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
   },
 
   loadTeachers: async (page = 1) => {
-    const { filters, sortBy, lastKey, teachers, isLoading, isEndReached } =
-      get();
+    const { filters, lastKey, pageSize, teachers, isLoading } = get();
     if (isLoading) return;
 
     set({ isLoading: true });
 
-    const result = await getPaginatedTeachers(
-      filters,
-      lastKey,
-      4,
-      sortBy,
-      isEndReached
-    );
+    const result = await getPaginatedTeachers(filters, lastKey, pageSize);
+    if (Object.keys(filters).length === 0) {
+      set({
+        teachers:
+          page === 1 ? result.teachers : [...teachers, ...result.teachers],
+        lastKey: result.lastKey,
+        isEndReached: result.isEndReached || !result.lastKey,
+        page,
+        isLoading: false,
+      });
+    } else {
+      set({
+        teachers: result.teachers,
+        lastKey: null,
+        isEndReached: page * pageSize >= result.teachers.length,
+        page,
+        isLoading: false,
+      });
+    }
+  },
 
-    set({
-      teachers:
-        page === 1 ? result.teachers : [...teachers, ...result.teachers],
-      lastKey: result.lastKey,
-      isEndReached: result.isEndReached,
-      page,
-      isLoading: false,
-    });
+  loadMore: async () => {
+    const { teachers, filters, page, pageSize, isEndReached } = get();
+
+    if (isEndReached) return;
+
+    if (Object.keys(filters).length === 0) {
+      await get().loadTeachers(page + 1);
+    } else {
+      const nextPage = page + 1;
+      const isEnd = nextPage * pageSize >= teachers.length;
+      set({ page: nextPage, isEndReached: isEnd });
+    }
+  },
+
+  getVisibleTeachers: () => {
+    const { teachers, page, pageSize, filters } = get();
+
+    if (Object.keys(filters).length === 0) {
+      return teachers;
+    } else {
+      return teachers.slice(0, page * pageSize);
+    }
   },
 
   resetTeachers: () =>

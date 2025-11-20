@@ -94,7 +94,9 @@ export default function TeacherCard({ teacher }: { teacher: Teacher }) {
             </li>
           ))}
         </ul>
-        {isExpanded && <BtnTrialLesson className={css.btnTrial} />}
+        {isExpanded && (
+          <BtnTrialLesson className={css.btnTrial} teacher={teacher} />
+        )}
       </div>
     </article>
   );

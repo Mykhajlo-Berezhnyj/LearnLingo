@@ -5,16 +5,82 @@ import AuthMenu from "../AuthMenu/AuthMenu";
 import css from "./AppBar.module.css";
 import { useAuthStore } from "../zustand/stores/authStore";
 import UserMenu from "../UserMenu/UserMenu";
+import Button from "../Button/Button";
+import Icon from "../Icon/Icon";
+import React, { useEffect, useState } from "react";
+import clsx from "clsx";
 
 export default function AppBar({ className }: { className?: string }) {
   const { user } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflowY = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflowY = "";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth > 768) {
+        setIsOpen(false);
+      }
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  function Wrapper({ condition, wrapper, children }) {
+    return condition ? wrapper(children) : children;
+  }
+
+  function handleCloseMenu() {
+    setIsOpen(false);
+  }
+
+  function toggleMenu() {
+    setIsOpen((prev) => !prev);
+  }
 
   return (
     <header className={className}>
       <Container className={css.headerContainer}>
         <Logo className={css.logoWrap} />
-        <NavBar className={css.navBar} />
-        {user ? <UserMenu className={css.userMenu} /> : <AuthMenu />}
+        <Button className={css.burgerMenu} onClick={toggleMenu}>
+          <Icon
+            iconName={isOpen ? "close-x-icon" : "burger-icon"}
+            size={isOpen ? 20 : 24}
+            className={css.iconBurger}
+          />
+        </Button>
+        <Wrapper
+          condition={isOpen}
+          wrapper={(children) => (
+            <div className={clsx(css.wrapperBurger, isOpen && css.isOpen)}>
+              {children}
+            </div>
+          )}
+        >
+          <NavBar
+            className={clsx(css.navBar, isOpen && css.open)}
+            onCloseMenu={handleCloseMenu}
+          />
+          {user ? (
+            <UserMenu
+              className={clsx(css.userMenu, isOpen && css.open)}
+              onCloseMenu={handleCloseMenu}
+            />
+          ) : (
+            <AuthMenu
+              className={clsx(css.userMenu, isOpen && css.open)}
+              onCloseMenu={handleCloseMenu}
+            />
+          )}
+        </Wrapper>
       </Container>
     </header>
   );

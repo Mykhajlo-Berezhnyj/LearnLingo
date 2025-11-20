@@ -24,6 +24,7 @@ interface AuthFormProps<
   TSchema extends ObjectSchema<AnyObject>,
   TResult = void
 > {
+  className?: string;
   schema: TSchema;
   sendToBackend: (data: InferType<TSchema>) => Promise<TResult>;
   titleForm: string;
@@ -40,6 +41,7 @@ export default function AuthForm<
   TSchema extends ObjectSchema<AnyObject>,
   TResult = void
 >({
+  className,
   sendToBackend,
   schema,
   titleForm,
@@ -87,12 +89,12 @@ export default function AuthForm<
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className={className} onSubmit={handleSubmit(onSubmit)}>
       <div className={css.titleFormWrap}>
-        <h3 className={css.titleForm}>{titleForm}</h3>
+        <h2 className={css.titleForm}>{titleForm}</h2>
         <p className={css.textForm}>{textForm}</p>
+        {otherContent1}
       </div>
-      {otherContent1}
       <div className={css.inputWrap}>
         {fields.map(({ name, type, options, ...rest }) => {
           const errorMessage = errors[name]?.message as string | undefined;
@@ -142,7 +144,7 @@ export default function AuthForm<
             const selectedValue = watch(name);
             return (
               <div key={name} className={css.radioWrap}>
-                <h4 className={css.radioLabel}>{rest.placeholder}</h4>
+                <h3 className={css.radioLabel}>{rest.placeholder}</h3>
                 <div key={name} className={css.radioGroup}>
                   {options.map((opt) => (
                     <label key={opt.value} className={css.radioOption}>

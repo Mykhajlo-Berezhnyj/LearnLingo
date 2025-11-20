@@ -1,0 +1,14 @@
+.trialForm {
+  @media (min-width: 768px) {
+    width: 472px;
+  }
+}
+
+.teacherInfo {
+  display: flex;
+  height: 44px;
+  gap: 14px;
+  justify-content: flex-start;
+  margin: 0;
+  align-self: flex-start;
+}

@@ -5,18 +5,31 @@ import { renderModalContent } from "../utils/renderModalContent";
 import { useModalStore } from "../zustand/stores/modalStore";
 import css from "./AuthMenu.module.css";
 
-export default function AuthMenu() {
+type AuthMenuProps = {
+  className?: string;
+  onCloseMenu?: () => void;
+};
+
+export default function AuthMenu({ className, onCloseMenu }: AuthMenuProps) {
   const { modalType, setModalType, closeModal } = useModalStore();
   return (
-    <>
+    <div className={className}>
       <ul className={css.btnWrapper}>
         <li>
-          <BtnLogInOut onClick={() => setModalType("login")} />
+          <BtnLogInOut
+            onClick={() => {
+              setModalType("login");
+              onCloseMenu();
+            }}
+          />
         </li>
         <li>
           <Button
             className={css.btnRegister}
-            onClick={() => setModalType("register")}
+            onClick={() => {
+              setModalType("register");
+              onCloseMenu();
+            }}
           >
             Registration
           </Button>
@@ -25,6 +38,6 @@ export default function AuthMenu() {
       <Modal isOpen={!!modalType} onClose={closeModal}>
         {renderModalContent(modalType)}
       </Modal>
-    </>
+    </div>
   );
 }

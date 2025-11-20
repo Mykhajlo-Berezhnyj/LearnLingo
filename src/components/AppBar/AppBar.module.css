@@ -11,9 +11,84 @@
   align-items: center;
 }
 
-.userMenu {
+.wrapperBurger {
   display: flex;
-  gap: 20px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 50px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  transform: translateY(--btn-radius);
+  opacity: 0;
+  padding: 80px;
+  width: 100%;
+  height: 100vh;
+  z-index: 900;
+  background-color: var(--background);
+  transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+.wrapperBurger.isOpen {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navBar {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.navBar.open {
+  order: 2;
+}
+
+.navBar.open,
+.userMenu.open,
+.AuthMenu {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.userMenu {
+  display: none;
+  @media (min-width: 768px) {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.AuthMenu {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.burgerMenu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  z-index: 950;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.iconBurger {
+  width: 20px;
+  height: 100%;
+  stroke: var(--color-font-main);
 }
