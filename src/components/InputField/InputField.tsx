@@ -10,6 +10,7 @@ interface InputFieldProps<T extends FieldValues> {
   autoComplete?: string;
   children?: React.ReactNode;
   className?: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField<T extends FieldValues>({
@@ -21,17 +22,24 @@ export default function InputField<T extends FieldValues>({
   autoComplete,
   children,
   className,
+  onBlur,
   ...rest
 }: InputFieldProps<T>) {
+  const registerProps = register(name);
+
   return (
     <div className={className}>
       <input
         className={error ? css.errorInput : undefined}
-        {...register(name)}
+        {...registerProps}
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
         {...rest}
+        onBlur={(e) => {
+          registerProps.onBlur(e);
+          onBlur?.(e);
+        }}
       />
       {error && (
         <span role="alert" className={css.error}>

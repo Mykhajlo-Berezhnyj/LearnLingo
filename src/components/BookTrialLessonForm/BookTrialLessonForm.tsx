@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+import { TrialRequest } from "../../types/trialRequests";
 import type { FieldConfig } from "../AuthForm/AuthForm";
 import AuthForm from "../AuthForm/AuthForm";
 import { sendTrialRequest } from "../service/sendTrialRequest";
@@ -37,7 +39,21 @@ export default function BookTrialLessonForm() {
   return (
     <AuthForm
       className={css.trialForm}
-      sendToBackend={sendTrialRequest}
+      sendToBackend={async (formData) => {
+        if (!selectedTeacher || !user) return;
+
+        const trialRequest: TrialRequest = {
+          teacherId: selectedTeacher.id,
+          userId: user.uid,
+          reason: formData.reason ?? "",
+          fullName: formData.FullName ?? "",
+          email: formData.email ?? "",
+          phoneNumber: formData.PhoneNumber ?? "",
+          createdAt: new Date().toISOString(),
+        };
+
+        await sendTrialRequest(trialRequest);
+      }}
       schema={trialSchema}
       titleForm={"Book trial lesson"}
       textForm={
@@ -52,10 +68,12 @@ export default function BookTrialLessonForm() {
           user.displayName ?? "user"
         }! Your teacher contacts for your`
       }
-      onSuccess={(user) => {
-        closeModal();
-      }}
+      onSuccess={() => closeModal()}
       fields={fields}
+      defaultValues={{
+        FullName: user?.displayName ?? "",
+        email: user?.email ?? "",
+      }}
     />
   );
 }

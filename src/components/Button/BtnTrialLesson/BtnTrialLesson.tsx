@@ -1,5 +1,4 @@
 import Button from "../Button";
-import css from "./BtnTrialLesson.module.css";
 import { useAuthStore } from "../../zustand/stores/authStore";
 import { useModalStore } from "../../zustand/stores/modalStore";
 import Modal from "../../Modal/Modal";

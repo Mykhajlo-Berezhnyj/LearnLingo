@@ -4,6 +4,7 @@ import AuthForm from "../AuthForm/AuthForm";
 import { useAuthActions } from "../service/useAuthActions";
 import { LoginData, loginSchema } from "../validation/validation";
 import { useModalStore } from "../zustand/stores/modalStore";
+import { useAuthStore } from "../zustand/stores/authStore";
 
 const fields: FieldConfig<LoginData>[] = [
   { name: "email", type: "email", placeholder: "Email" },
@@ -13,6 +14,7 @@ const fields: FieldConfig<LoginData>[] = [
 export default function LoginForm() {
   const closeModal = useModalStore((store) => store.closeModal);
   const { login } = useAuthActions();
+  const pendingEmail = useAuthStore((s) => s.pendingEmail);
 
   return (
     <AuthForm<typeof loginSchema, User>
@@ -26,10 +28,11 @@ export default function LoginForm() {
       successMessage={(user) =>
         `Log In successful! Welcome back, ${user.displayName ?? "user"}!`
       }
-      onSuccess={(user) => {
+      onSuccess={() => {
         closeModal();
       }}
       fields={fields}
+      defaultValues={{ email: pendingEmail ?? "" }}
     />
   );
 }

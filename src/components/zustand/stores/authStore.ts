@@ -2,17 +2,24 @@ import { create } from "zustand";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { usePaginatedTeachersStore } from "./teachers";
+import { getIsCheckingEmail } from "../../service/checkEmailExists";
 
 interface AuthState {
   user: User | null;
+  pendingEmail: string | null;
   isLoading: boolean;
   setUser: (user: User | null) => void;
   updateUser: (data: Partial<User>) => void;
   logout: () => Promise<void>;
+  setPendingEmail: (email: string) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
   const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (getIsCheckingEmail()) {
+      return;
+    }
+
     set({ user, isLoading: false });
   });
 
@@ -30,8 +37,9 @@ export const useAuthStore = create<AuthState>((set, get) => {
     },
     logout: async () => {
       await signOut(auth);
-      set({ user: null });
+      set({ user: null, pendingEmail: null });
       usePaginatedTeachersStore.getState().resetFavorites();
     },
+    setPendingEmail: (email) => set({ pendingEmail: email }),
   };
 });

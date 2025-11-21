@@ -9,7 +9,7 @@ import {
   signOut,
   type User,
 } from "firebase/auth";
-import { ref, set } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 import { auth, database } from "../../firebase";
 import { useAuthStore } from "../zustand/stores/authStore";
 import { FirebaseError } from "firebase/app";
@@ -18,6 +18,23 @@ import { usePaginatedTeachersStore } from "../zustand/stores/teachers";
 
 export function useAuthActions() {
   const setUser = useAuthStore.getState().setUser;
+
+  const saveUserToDatabase = async (user: User, additionalData?: any) => {
+    const userRef = ref(database, `users/${user.uid}`);
+
+    const snapshot = await get(userRef);
+
+    if (!snapshot.exists()) {
+      await set(userRef, {
+        name: user.displayName || additionalData?.name || "User",
+        email: user.email || "",
+        photoURL: user.photoURL || "",
+        provider: user.providerData[0]?.providerId || "email",
+        registeredAt: new Date().toISOString(),
+        ...additionalData,
+      });
+    }
+  };
 
   const register = async (data: RegistrationData): Promise<User> => {
     try {
@@ -28,22 +45,17 @@ export function useAuthActions() {
       );
       await updateProfile(user, { displayName: data.name });
 
-      const userRef = ref(database, `users/${user.uid}`);
-      await set(userRef, {
-        name: data.name,
-        email: data.email,
-        registeredAt: new Date().toISOString(),
-      });
+      await saveUserToDatabase(user, { name: data.name });
 
       setUser(user);
       return user;
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         if (error.code === "auth/email-already-in-use") {
-          throw new Error("this email is existing");
+          throw new Error("This email is already in use");
         }
         if (error.code === "auth/weak-password") {
-          throw new Error("Password low");
+          throw new Error("Password is too weak");
         }
       }
       throw error;
@@ -61,11 +73,14 @@ export function useAuthActions() {
       return user;
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
-        if (error.code === "auth/user-not-found") {
-          throw new Error("User not found");
+        if (
+          error.code === "auth/user-not-found" ||
+          error.code === "auth/invalid-credential"
+        ) {
+          throw new Error("Invalid email or password");
         }
         if (error.code === "auth/wrong-password") {
-          throw new Error("wrong password");
+          throw new Error("Wrong password");
         }
       }
       throw error;
@@ -79,27 +94,72 @@ export function useAuthActions() {
   };
 
   const googleLogin = async (): Promise<User> => {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    setUser(user);
-    return user;
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      await saveUserToDatabase(user);
+
+      setUser(user);
+      return user;
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/popup-closed-by-user") {
+          throw new Error("Login cancelled");
+        }
+        if (error.code === "auth/account-exists-with-different-credential") {
+          throw new Error("An account already exists with this email");
+        }
+      }
+      throw error;
+    }
   };
 
   const facebookLogin = async (): Promise<User> => {
-    const provider = new FacebookAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    setUser(user);
-    return user;
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      await saveUserToDatabase(user);
+
+      setUser(user);
+      return user;
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/popup-closed-by-user") {
+          throw new Error("Login cancelled");
+        }
+        if (error.code === "auth/account-exists-with-different-credential") {
+          throw new Error("An account already exists with this email");
+        }
+      }
+      throw error;
+    }
   };
 
   const githubLogin = async (): Promise<User> => {
-    const provider = new GithubAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    setUser(user);
-    return user;
+    try {
+      const provider = new GithubAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      await saveUserToDatabase(user);
+
+      setUser(user);
+      return user;
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/popup-closed-by-user") {
+          throw new Error("Login cancelled");
+        }
+        if (error.code === "auth/account-exists-with-different-credential") {
+          throw new Error("An account already exists with this email");
+        }
+      }
+      throw error;
+    }
   };
 
   return { register, login, logout, googleLogin, facebookLogin, githubLogin };

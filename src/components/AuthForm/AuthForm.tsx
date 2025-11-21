@@ -1,4 +1,4 @@
-import { useForm, type Path } from "react-hook-form";
+import { useForm, type Path, type DefaultValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import css from "./AuthForm.module.css";
 import { useState } from "react";
@@ -18,6 +18,7 @@ export interface FieldConfig<T> {
   placeholder: string;
   autoComplete?: string;
   options?: { label: string; value: string }[];
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 interface AuthFormProps<
@@ -30,6 +31,7 @@ interface AuthFormProps<
   titleForm: string;
   textForm: string;
   fields: FieldConfig<InferType<TSchema>>[];
+  defaultValues?: DefaultValues<InferType<TSchema>>;
   btnLabel: string;
   onSuccess?: (user: User) => void;
   successMessage?: ((user: User) => string) | string;
@@ -48,6 +50,7 @@ export default function AuthForm<
   textForm,
   btnLabel,
   fields,
+  defaultValues,
   successMessage,
   onSuccess,
   otherContent1,
@@ -66,6 +69,7 @@ export default function AuthForm<
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     shouldFocusError: true,
+    defaultValues,
   });
 
   const onSubmit = async (data: FormData) => {
@@ -182,6 +186,7 @@ export default function AuthForm<
               error={errorMessage}
               type={type}
               className={css.inputWrapper}
+              onBlur={rest.onBlur}
               {...rest}
             />
           );
