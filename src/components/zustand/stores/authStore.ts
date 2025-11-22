@@ -14,32 +14,29 @@ interface AuthState {
   setPendingEmail: (email: string) => void;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (getIsCheckingEmail()) {
-      return;
+export const useAuthStore = create<AuthState>((set, get) => ({
+  user: auth.currentUser,
+  pendingEmail: null,
+  isLoading: !auth.currentUser,
+  setUser: (user) => set({ user }),
+  updateUser: (data) => {
+    const currentUser = get().user;
+    if (currentUser) {
+      set({ user: { ...currentUser, ...data } as User });
     }
+  },
+  logout: async () => {
+    await signOut(auth);
+    set({ user: null });
+    usePaginatedTeachersStore.getState().resetFavorites();
+  },
+  setPendingEmail: (email) => set({ pendingEmail: email }),
+}));
 
-    set({ user, isLoading: false });
-  });
-
-  window.addEventListener("beforeunload", unsubscribe);
-
-  return {
-    user: auth.currentUser,
-    isLoading: !auth.currentUser,
-    setUser: (user) => set({ user }),
-    updateUser: (data) => {
-      const currentUser = get().user;
-      if (currentUser) {
-        set({ user: { ...currentUser, ...data } as User });
-      }
-    },
-    logout: async () => {
-      await signOut(auth);
-      set({ user: null, pendingEmail: null });
-      usePaginatedTeachersStore.getState().resetFavorites();
-    },
-    setPendingEmail: (email) => set({ pendingEmail: email }),
-  };
+onAuthStateChanged(auth, (user) => {
+  if (!getIsCheckingEmail()) {
+    useAuthStore.setState({ user, isLoading: false });
+  }
 });
+
+window.addEventListener("beforeunload", () => {});
