@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 32px;
   justify-content: center;
-  background-color: var(--bgcolor-banner);
+  background-color: var(--bgcolor-teacher);
 }
 
 .teachers {

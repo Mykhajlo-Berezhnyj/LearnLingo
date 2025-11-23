@@ -1,0 +1,21 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: var(--font-main);
+  height: 100vh;
+  gap: 20px;
+  transition: background 1s linear ease-in-out;
+}
+
+.err {
+  font-size: 80px;
+  font-weight: 900;
+}
+.txt {
+  font-size: var(--fs-h2);
+  font-weight: bold;
+  color: white;
+}

@@ -11,7 +11,7 @@
 }
 
 .modalContent {
-  background: white;
+  background: var(--background);
   padding: 32px 16px;
   border-radius: var(--radius);
   position: relative;

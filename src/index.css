@@ -2,6 +2,7 @@
   --font-family: "Roboto", sans-serif;
   --background: #ffffff;
   --bgcolor-banner: #f8f8f8;
+  --bgcolor-teacher: #f8f8f8;
   --color-primary: #f4c550;
   --color-secondary: #fbe9ba;
   --color-primary-rgb: 244, 197, 80;
@@ -19,6 +20,9 @@
   --color-font-white: #ffffff;
   --color-font-second: #8a8a89;
   --color-font-thirty: #12141733;
+  --color-font-banner: #121417;
+  --color-label-banner: #121417B2;
+
 
   /* font-size */
   --fs-base: 1rem;
@@ -55,6 +59,7 @@
   color-scheme: light dark;
   color: var(--color-font-main);
   background: var(--background);
+  color-level: 
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -110,6 +115,7 @@ body {
   color: var(--color-font-main);
   letter-spacing: var(--ltsp-base);
   text-align: left;
+  background-color: var(--background);
 }
 
 button {
@@ -178,4 +184,19 @@ h3 {
   font-weight: var(--fw-medium);
   letter-spacing: 0;
   line-height: var(--lh-h3);
+}
+
+.dark {
+  a:hover {
+    color: var(--inputs);
+  }
+
+  color: rgba(255, 255, 255, 0.87);
+  --background: #5f5959;
+  --header-color: var(--color-font-second);
+  --bgcolor-teacher: #161414;
+  --font-main: #ffffff;
+  --active-link-hover: var(--inputs);
+  --color-label-banner: #121417;
+;
 }

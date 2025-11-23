@@ -55,7 +55,7 @@ svg.dashedBorder {
 .label {
   font-size: var(--fs-small);
   line-height: var(--lh-big);
-  color: var(--color-font-second);
+  color: var(--color-label-banner);
 
   @media (min-width: 1440px) {
     white-space: wrap;

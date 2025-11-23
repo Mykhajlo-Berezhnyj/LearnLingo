@@ -7,10 +7,17 @@ import { useAuthStore } from "../zustand/stores/authStore";
 import UserMenu from "../UserMenu/UserMenu";
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import clsx from "clsx";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
-export default function AppBar({ className }: { className?: string }) {
+type AppBarProps = {
+  className?: string;
+  theme: string;
+  setTheme: Dispatch<SetStateAction<string>>;
+};
+
+export default function AppBar({ className, theme, setTheme }: AppBarProps) {
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -70,15 +77,21 @@ export default function AppBar({ className }: { className?: string }) {
             onCloseMenu={handleCloseMenu}
           />
           {user ? (
-            <UserMenu
-              className={clsx(css.userMenu, isOpen && css.open)}
-              onCloseMenu={handleCloseMenu}
-            />
+            <div className={css.userMenu}>
+              <UserMenu
+                className={clsx(css.userMenu, isOpen && css.open)}
+                onCloseMenu={handleCloseMenu}
+              />
+              <ThemeToggle theme={theme} setTheme={setTheme} />
+            </div>
           ) : (
-            <AuthMenu
-              className={clsx(css.userMenu, isOpen && css.open)}
-              onCloseMenu={handleCloseMenu}
-            />
+            <div className={css.userMenu}>
+              <AuthMenu
+                className={clsx(css.userMenu, isOpen && css.open)}
+                onCloseMenu={handleCloseMenu}
+              />
+              <ThemeToggle theme={theme} setTheme={setTheme} />
+            </div>
           )}
         </Wrapper>
       </Container>

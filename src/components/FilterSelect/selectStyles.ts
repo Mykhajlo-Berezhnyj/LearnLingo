@@ -5,7 +5,7 @@ export const customSelectStyles = {
     border: "none",
     boxShadow: "none",
     height: 48,
-    borderRadius: "var(--input-radius)",
+    borderRadius: 14,
     display: "flex",
     alignItems: "center",
     "&:hover": { borderColor: "#555" },
@@ -13,11 +13,13 @@ export const customSelectStyles = {
   valueContainer: (base) => ({
     ...base,
     height: 48,
+    backgroundColor: "var(--background)",
     margin: 0,
     padding: "0 14px",
     display: "flex",
     flexWrap: "nowrap",
     alignItems: "center",
+    borderRadius: 14,
   }),
   placeholder: (base, state) => ({
     ...base,
@@ -30,25 +32,27 @@ export const customSelectStyles = {
   }),
   menu: (base) => ({
     ...base,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    zIndex: 10,
+    backgroundColor: "var(--background)",
+    borderRadius: 12,
+    zIndex: 20,
   }),
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isSelected
-      ? "#FFFFFF"
+      ? "var(--background)"
       : state.isFocused
       ? "#e6f0ff"
       : "#fff",
-    color: state.isSelected ? "#101828" : "#8D929A",
+    color: state.isSelected
+      ? "var(--color-font-main)"
+      : "var(--color-font-second)",
     "&:active": {
       color: "#101828",
     },
-    "&:hover": {
-      color: "#101828",
-      backgroundColor: "#F7F7F7",
-    },
+    // "&:hover": {
+    //   color: "#101828",
+    //   backgroundColor: "#F7F7F7",
+    // },
   }),
   dropdownIndicator: (base) => ({
     ...base,
