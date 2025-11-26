@@ -25,8 +25,8 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width=".667" d="M16 10.154v6.577l4.385 3.654M25.5 16c0 5.247-4.253 9.5-9.5 9.5S6.5 21.247 6.5 16s4.253-9.5 9.5-9.5 9.5 4.253 9.5 9.5z"/>
     </symbol>
     <symbol id="close-x-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 8L8 24" stroke="current Color" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M8 8L24 24" stroke="current Color" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 8L8 24" stroke="current Color" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 8L24 24" stroke="current Color" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
     <symbol id="pswd-icon" viewBox="0 0 31 32">
       <path stroke-linecap="round" stroke-width="1.28" d="M18.446 22.384c-1.042.484-2.2.799-3.418.799-4.588 0-8.308-4.469-8.308-5.604 0-.644 1.195-2.358 3.066-3.723m12.553 5.519c.636-.765.997-1.442.997-1.796 0-1.135-3.719-5.604-8.308-5.604 2.019 0 3.655 1.623 3.655 3.626m-3.655 3.626c-2.019 0-3.655-1.623-3.655-3.626M24 11.975c-2.53-2.094-5.484-3.296-8.64-3.296-1.137 0-2.248.156-3.323.454M6.72 11.975c.235-.194.473-.381.714-.559M6.72 7.36l16.046 16.2"/>
@@ -55,7 +55,7 @@
       <path d="M1.33325 4.13333C1.33325 3.3866 1.33325 3.01323 1.47858 2.72801C1.60641 2.47713 1.81038 2.27316 2.06126 2.14532C2.34648 2 2.71985 2 3.46659 2H3.73325C5.22673 2 5.97346 2 6.54389 2.29065C7.04566 2.54631 7.45361 2.95426 7.70927 3.45603C7.99992 4.02646 7.99992 4.77319 7.99992 6.26667V14L7.93322 13.8999C7.47012 13.2053 7.23857 12.858 6.93265 12.6065C6.66182 12.3839 6.34976 12.2169 6.01432 12.1151C5.63542 12 5.21799 12 4.38313 12H3.46659C2.71985 12 2.34648 12 2.06126 11.8547C1.81038 11.7268 1.60641 11.5229 1.47858 11.272C1.33325 10.9868 1.33325 10.6134 1.33325 9.86667V4.13333Z" stroke="current color" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
     <symbol id="radio" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="3" width="18" height="18" rx="9" stroke="#121417" stroke-opacity="0.2" stroke-width="2"/>
+      <rect x="3" y="3" width="18" height="18" rx="9"  stroke-width="2"/>
     </symbol>
     <symbol id="radio-checked" width="24" height="24" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg">
       <rect x="3" y="3" width="18" height="18" rx="9" fill="none" stroke-width="2"/>

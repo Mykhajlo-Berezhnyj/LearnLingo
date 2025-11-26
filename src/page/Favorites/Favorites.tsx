@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { usePaginatedTeachersStore } from "../../components/zustand/stores/teachers";
+import { teachersStore } from "../../components/zustand/stores/teachers";
 import css from "../Teachers/Teachers.module.css";
 import { useAuthStore } from "../../components/zustand/stores/authStore";
 import { usePaginatedFavorites } from "../../components/utils/pagination/usePaginatedFavorites";
@@ -12,8 +12,8 @@ export default function Favorites() {
   const { visibleFavorites, isEndReached, loadMore, page } =
     usePaginatedFavorites();
 
-  const { loadFavoriteTeachers, resetFavorites, clearFilters } =
-    usePaginatedTeachersStore();
+  const { loadFavoriteTeachers, resetFavorites, clearFilters, status } =
+    teachersStore();
 
   useEffect(() => {
     resetFavorites();
@@ -32,7 +32,7 @@ export default function Favorites() {
       <TeachersSection
         className={css.teachers}
         teachers={visibleFavorites}
-        isLoading={false}
+        status={status}
         isEndReached={isEndReached}
         page={page}
         onLoadMore={loadMore}

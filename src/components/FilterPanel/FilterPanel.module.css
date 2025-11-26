@@ -4,6 +4,19 @@
 
 .containerFilters {
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  align-content: flex-end;
+  gap: 50px;
+
+  @media (min-width: 768px) {
+    justify-content: flex-start;
+  }
+}
+
+.filterWrap {
+  display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
@@ -26,4 +39,14 @@
 
 .filterPrice {
   width: 124px;
+}
+
+.btnClear {
+  width: 220px;
+  background-color: var(--color-font-main);
+  align-items: center;
+  height: 48px;
+  color: red;
+  margin: 0;
+  align-self: flex-end;
 }

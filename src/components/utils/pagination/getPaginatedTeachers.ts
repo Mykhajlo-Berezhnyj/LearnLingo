@@ -18,6 +18,23 @@ interface PaginatedResult {
   teachers: Teacher[];
   lastKey: string | null;
   isEndReached: boolean;
+  totalCount: number;
+}
+
+function pickBestBackendFilter(
+  filters: Filters
+): [string, string | number] | null {
+  const priority: (keyof Filters)[] = ["language", "level", "price_per_hour"];
+  const entries = Object.entries(filters).filter(([_, v]) => v != null) as [
+    string,
+    string | number
+  ][];
+
+  for (const k of priority) {
+    const found = entries.find(([key]) => key === k);
+    if (found) return found;
+  }
+  return entries.length > 0 ? entries[0] : null;
 }
 
 export async function getPaginatedTeachers(
@@ -28,8 +45,11 @@ export async function getPaginatedTeachers(
   const db = getDatabase();
   const activeFilters = Object.entries(filters).filter(([_, v]) => v != null);
   let q;
+  let totalCount = 0;
   const hasNoFilters = activeFilters.length === 0;
   // const hasSingleFilter = activeFilters.length === 1;
+
+  const fetchLimit = pageSize + 1;
 
   if (hasNoFilters) {
     q = lastKey
@@ -37,31 +57,38 @@ export async function getPaginatedTeachers(
           ref(db, "teachers"),
           orderByKey(),
           startAt(lastKey),
-          limitToFirst(pageSize + 1)
+          limitToFirst(fetchLimit)
         )
-      : query(ref(db, "teachers"), orderByKey(), limitToFirst(pageSize));
+      : query(ref(db, "teachers"), orderByKey(), limitToFirst(fetchLimit));
+    const countSnap = await getFromDB(query(ref(db, "teachers")));
+
+    totalCount = countSnap.size;
+    console.log("🚀 ~ getPaginatedTeachers ~ totalCount:", totalCount);
   } else {
-    const [key, value] = activeFilters[0];
-    let path;
-    if (key === "language") {
-      path = `languages/${value}`;
-      q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
-    } else if (key === "level") {
-      path = `levels/${value}`;
-      q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
-    } else if (key === "price_per_hour") {
-      path = "price_per_hour";
-      q = query(
-        ref(db, "teachers"),
-        orderByChild("price_per_hour"),
-        endAt(value)
-      );
+    const primary = pickBestBackendFilter(filters);
+    if (!primary) {
+      q = query(ref(db, "teachers"), orderByKey(), limitToFirst(fetchLimit));
+    } else {
+      const [key, value] = primary;
+      let path;
+      if (key === "language") {
+        path = `languages/${value}`;
+        q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
+      } else if (key === "level") {
+        path = `levels/${value}`;
+        q = query(ref(db, "teachers"), orderByChild(path), equalTo(true));
+      } else if (key === "price_per_hour") {
+        path = "price_per_hour";
+        q = query(ref(db, "teachers"), orderByChild(path), endAt(value));
+      } else
+        q = query(ref(db, "teachers"), orderByKey(), limitToFirst(fetchLimit));
     }
   }
-
   const snapshot = await getFromDB(q);
+
   const raw = snapshot.val();
-  if (!raw) return { teachers: [], lastKey: null, isEndReached: true };
+  if (!raw)
+    return { teachers: [], lastKey: null, isEndReached: true, totalCount };
 
   let entries = Object.entries(raw);
   if (hasNoFilters && lastKey) {
@@ -84,20 +111,26 @@ export async function getPaginatedTeachers(
     ? allTeachers
     : applyFilters(allTeachers, filters);
 
+  totalCount = hasNoFilters ? totalCount : filtered.length;
+  console.log("🚀 ~ getPaginatedTeachers ~ totalCount:", totalCount);
   if (hasNoFilters) {
     const paginated = filtered.slice(0, pageSize);
     const newLastKey = paginated.length > 0 ? paginated.at(-1)!.id : null;
+
     const isEndReached = paginated.length < pageSize;
+
     return {
       teachers: paginated,
       lastKey: newLastKey,
       isEndReached,
+      totalCount,
     };
   } else {
     return {
       teachers: filtered,
       lastKey: null,
       isEndReached: true,
+      totalCount,
     };
   }
 }

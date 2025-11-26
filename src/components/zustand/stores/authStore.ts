@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { auth } from "../../../firebase";
-import { usePaginatedTeachersStore } from "./teachers";
+import { teachersStore } from "./teachers";
 import { getIsCheckingEmail } from "../../service/checkEmailExists";
 
 interface AuthState {
@@ -28,7 +28,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: async () => {
     await signOut(auth);
     set({ user: null });
-    usePaginatedTeachersStore.getState().resetFavorites();
+    teachersStore.getState().resetFavorites();
   },
   setPendingEmail: (email) => set({ pendingEmail: email }),
 }));

@@ -1,4 +1,4 @@
-import { usePaginatedTeachersStore } from "../../zustand/stores/teachers";
+import { teachersStore } from "../../zustand/stores/teachers";
 import { applyFilters } from "../filtering/applyFilters";
 
 export function usePaginatedFavorites() {
@@ -9,7 +9,7 @@ export function usePaginatedFavorites() {
     favoritePageSize,
     resetFavoritePage,
     setFavoritePage,
-  } = usePaginatedTeachersStore();
+  } = teachersStore();
 
   const filtered = applyFilters(favoriteTeachers, filters);
 

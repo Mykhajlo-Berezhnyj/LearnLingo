@@ -47,21 +47,26 @@
 }
 
 .navBar.open,
+.wrapMenu.open,
 .userMenu.open,
-.AuthMenu {
+.AuthMenu.open {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  flex-direction: column;
 }
 
+.wrapMenu,
 .userMenu {
   display: none;
+
   @media (min-width: 768px) {
     display: flex;
     gap: 20px;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
   }
 }
 
@@ -91,15 +96,4 @@
   width: 20px;
   height: 100%;
   stroke: var(--color-font-main);
-}
-
-.userMenu {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-  }
 }

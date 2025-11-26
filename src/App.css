@@ -37,3 +37,7 @@
   justify-content: space-between;
   padding: 20px 0;
 }
+
+.fallbackLoader {
+  margin-top: 220px;
+}

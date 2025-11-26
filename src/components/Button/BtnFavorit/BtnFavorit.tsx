@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import type { Teacher } from "../../../types/teacher";
 import Icon from "../../Icon/Icon";
-import { usePaginatedTeachersStore } from "../../zustand/stores/teachers";
+import { teachersStore } from "../../zustand/stores/teachers";
 import Button from "../Button";
 import css from "./BtnFavorit.module.css";
 import { useAuthStore } from "../../zustand/stores/authStore";
@@ -15,11 +15,8 @@ export default function BtnFavorit({
   teacher: Teacher;
 }) {
   const user = useAuthStore((s) => s.user);
-  const favorites = usePaginatedTeachersStore((state) => state.favorites);
+  const { favorites, toggleFavorite } = teachersStore();
   const isFavorite = favorites.includes(teacher.id);
-  const toggleFavorite = usePaginatedTeachersStore(
-    (state) => state.toggleFavorite
-  );
   const setModalType = useModalStore((state) => state.setModalType);
 
   const handleFavorite = async () => {
@@ -29,7 +26,7 @@ export default function BtnFavorit({
     }
     try {
       await toggleFavorite(teacher.id);
-      const updatedFavorites = usePaginatedTeachersStore.getState().favorites;
+      const updatedFavorites = teachersStore.getState().favorites;
       const nowFavorite = updatedFavorites.includes(teacher.id);
       toast.success(
         nowFavorite ? "Added to favorites" : "Removed from favorites"

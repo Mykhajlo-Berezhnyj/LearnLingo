@@ -41,7 +41,7 @@
 
   @media (min-width: 1440px) {
     padding-block: 98px;
-    max-width: 720px;
+    width: 720px;
     padding-left: 64px;
     padding-right: 108px;
   }
@@ -63,7 +63,7 @@
   }
 
   @media (min-width: 1440px) {
-    max-width: 568px;
+    width: 568px;
     padding-left: 103.64px;
     padding-right: 104.64px;
   }

@@ -8,14 +8,14 @@ export const customSelectStyles = {
     borderRadius: 14,
     display: "flex",
     alignItems: "center",
-    "&:hover": { borderColor: "#555" },
+    // "&:hover": { borderColor: "#555" },
   }),
   valueContainer: (base) => ({
     ...base,
     height: 48,
     backgroundColor: "var(--background)",
     margin: 0,
-    padding: "0 14px",
+    padding: "0 18px",
     display: "flex",
     flexWrap: "nowrap",
     alignItems: "center",
@@ -28,12 +28,13 @@ export const customSelectStyles = {
   }),
   singleValue: (base) => ({
     ...base,
-    color: "#333",
+    color: "var(--font-main)",
   }),
   menu: (base) => ({
     ...base,
     backgroundColor: "var(--background)",
     borderRadius: 12,
+    padding: "0 18px",
     zIndex: 20,
   }),
   option: (base, state) => ({
@@ -41,13 +42,15 @@ export const customSelectStyles = {
     backgroundColor: state.isSelected
       ? "var(--background)"
       : state.isFocused
-      ? "#e6f0ff"
-      : "#fff",
+      ? "var(--background)"
+      : "var(--background)",
     color: state.isSelected
+      ? "var(--color-font-main)"
+      : state.isFocused
       ? "var(--color-font-main)"
       : "var(--color-font-second)",
     "&:active": {
-      color: "#101828",
+      color: "var(--color-font-main)",
     },
     // "&:hover": {
     //   color: "#101828",

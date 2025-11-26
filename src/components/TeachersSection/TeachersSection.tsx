@@ -3,11 +3,12 @@ import Button from "../Button/Button";
 import TeachersList from "../TeachersList/TeachersList";
 import type { Teacher } from "../../types/teacher";
 import Container from "../Container/Container";
+import Loader from "../Loader/Loader";
 
 interface Props {
   className?: string;
   teachers: Teacher[];
-  isLoading: boolean;
+  status: string;
   isEndReached: boolean;
   page: number;
   onLoadMore: () => void;
@@ -17,18 +18,19 @@ interface Props {
 export default function TeachersSection({
   className,
   teachers,
-  isLoading,
+  status,
   isEndReached,
-  page,
   onLoadMore,
   emptyMessage = "No teachers found.",
 }: Props) {
   return (
     <section className={className}>
       <Container className={css.teacherContainer}>
-        <TeachersList teachers={teachers} className={css.teachersList} />
-        {isLoading && <p className={css.loader}>Loading...</p>}
-        {!isEndReached && !isLoading && teachers.length > 0 && (
+        {teachers.length > 0 && (
+          <TeachersList teachers={teachers} className={css.teachersList} />
+        )}
+        {status === "loading" && <Loader />}
+        {!isEndReached && status === "succeeded" && teachers.length > 0 && (
           <Button
             className={css.loadMoreBtn}
             color="btnPrimary"
@@ -42,8 +44,11 @@ export default function TeachersSection({
           <p className={css.endMessage}>No more teachers available.</p>
         )}
 
-        {!isLoading && teachers.length === 0 && (
+        {status === "succeeded" && teachers.length === 0 && (
           <p className={css.emptyMessage}>{emptyMessage}</p>
+        )}
+        {status === "failed" && (
+          <p className={css.errorMessage}>Something went wrong…</p>
         )}
       </Container>
     </section>

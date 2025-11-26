@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { getLanguages } from "../service/getLanguages";
-import { usePaginatedTeachersStore } from "../zustand/stores/teachers";
+import { teachersStore } from "../zustand/stores/teachers";
 import FilterSelect from "../FilterSelect/FilterSelect";
 import css from "./FilterPanel.module.css";
 import Container from "../Container/Container";
+import BtnClearFilters from "../Button/BtnClearFilters/BtnClearFilters";
 
 export default function FilterPanel() {
-  const { filters, setFilters } = usePaginatedTeachersStore();
+  const { filters, setFilters, totalCount } = teachersStore();
   const [languages, setLanguages] = useState<string[]>([]);
 
   const levels = [
@@ -33,8 +34,8 @@ export default function FilterPanel() {
 
   return (
     <div className={css.sectionFilters}>
-      <Container>
-        <div className={css.containerFilters}>
+      <Container className={css.containerFilters}>
+        <div className={css.filterWrap}>
           <FilterSelect
             label="Language"
             className={css.filterLang}
@@ -71,6 +72,14 @@ export default function FilterPanel() {
             onClear={() => setFilters({ price_per_hour: null })}
           />
         </div>
+        {totalCount > 0 && (
+          <p>
+            {totalCount === 1
+              ? "Found 1 teacher"
+              : `Found ${totalCount} teachers`}
+          </p>
+        )}
+        {totalCount === 0 && <BtnClearFilters className={css.btnClear} />}
       </Container>
     </div>
   );

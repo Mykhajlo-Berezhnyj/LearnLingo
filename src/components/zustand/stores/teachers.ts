@@ -9,6 +9,9 @@ import {
   saveFavorite,
 } from "../../service/favoritesService";
 import { getAllTeachers } from "../../utils/pagination/getAllTeachers";
+import { updateQueryParams } from "../../utils/updateQueryParams";
+
+type Status = "idle" | "loading" | "succeeded" | "failed";
 
 interface TeachersStore {
   teachers: Teacher[];
@@ -16,9 +19,10 @@ interface TeachersStore {
   sortBy: "rating" | "price_per_hour";
   page: number;
   pageSize: number;
+  totalCount: number;
   lastKey: string | null;
   isEndReached: boolean;
-  isLoading: boolean;
+  status: Status;
 
   favorites: string[];
   favoriteTeachers: Teacher[];
@@ -45,17 +49,19 @@ interface TeachersStore {
   loadFavoriteTeachers: () => Promise<void>;
   resetTeachers: () => void;
   resetFavorites: () => void;
+  initFromUrl: (params: URLSearchParams) => Promise<void>;
 }
 
-export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
+export const teachersStore = create<TeachersStore>((set, get) => ({
   teachers: [],
   filters: {},
   sortBy: "rating",
   page: 1,
   pageSize: 4,
+  totalCount: 0,
   lastKey: null,
   isEndReached: false,
-  isLoading: false,
+  status: "idle",
 
   favorites: [],
   favoriteTeachers: [],
@@ -65,16 +71,50 @@ export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
   userId: null,
   setUserId: (id) => set({ userId: id }),
 
-  setFilters: (newFilters) =>
-    set((state) => ({
-      filters: { ...state.filters, ...newFilters },
+  setFilters: (newFilters) => {
+    const cleanFilters: Filters = {};
+    Object.entries({ ...get().filters, ...newFilters }).forEach(
+      ([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          cleanFilters[key] = value;
+          console.log("🚀 ~ cleanFilters:", cleanFilters);
+        }
+      }
+    );
+
+    set(() => ({
+      filters: cleanFilters,
       page: 1,
       lastKey: null,
       isEndReached: false,
-    })),
+    }));
 
-  clearFilters: () =>
-    set({ filters: {}, page: 1, lastKey: null, isEndReached: false }),
+    updateQueryParams({
+      page: "1",
+      lastKey: null,
+      ...Object.fromEntries(
+        Object.entries(newFilters).map(([k, v]) => [k, v ?? null])
+      ),
+    });
+  },
+
+  clearFilters: () => {
+    set({
+      filters: {},
+      page: 1,
+      lastKey: null,
+      isEndReached: false,
+      status: "idle",
+    });
+    updateQueryParams({
+      page: null,
+      limit: null,
+      lastKey: null,
+      language: null,
+      level: null,
+      price_per_hour: null,
+    });
+  },
 
   setSortBy: (sort) => set({ sortBy: sort }),
 
@@ -129,51 +169,61 @@ export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
 
       const allTeachers = await getAllTeachers();
       const matched = allTeachers.filter((t) => ids.includes(t.id));
-      set({ favoriteTeachers: matched });
+      set({ favoriteTeachers: matched, status: "succeeded" });
     } catch (error) {
       console.error("Failed to load favorite teachers:", error);
+      set({ status: "failed" });
     }
   },
 
-  loadTeachers: async (page = 1) => {
-    const { filters, lastKey, pageSize, teachers, isLoading } = get();
-    if (isLoading) return;
+  loadTeachers: async () => {
+    const { filters, lastKey, pageSize, teachers, status, page } = get();
 
-    set({ isLoading: true });
+    if (status === "loading") return;
+    updateQueryParams({
+      page: String(page),
+      limit: String(pageSize),
+      lastKey: lastKey ?? null,
+    });
 
-    const result = await getPaginatedTeachers(filters, lastKey, pageSize);
-    if (Object.keys(filters).length === 0) {
-      set({
-        teachers:
-          page === 1 ? result.teachers : [...teachers, ...result.teachers],
-        lastKey: result.lastKey,
-        isEndReached: result.isEndReached || !result.lastKey,
-        page,
-        isLoading: false,
-      });
-    } else {
-      set({
-        teachers: result.teachers,
-        lastKey: null,
-        isEndReached: page * pageSize >= result.teachers.length,
-        page,
-        isLoading: false,
-      });
+    set({ status: "loading" });
+    try {
+      const result = await getPaginatedTeachers(filters, lastKey, pageSize);
+
+      if (Object.keys(filters).length === 0) {
+        set({
+          teachers:
+            page === 1 ? result.teachers : [...teachers, ...result.teachers],
+          lastKey: result.lastKey,
+          isEndReached: result.isEndReached || !result.lastKey,
+          page,
+          status: "succeeded",
+          totalCount: result.totalCount,
+        });
+      } else {
+        set({
+          teachers: result.teachers,
+          lastKey: null,
+          isEndReached: page * pageSize >= result.teachers.length,
+          page,
+          status: "succeeded",
+          totalCount: result.totalCount,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      set({ status: "failed" });
     }
   },
 
   loadMore: async () => {
-    const { teachers, filters, page, pageSize, isEndReached } = get();
+    const { isEndReached, page } = get();
 
     if (isEndReached) return;
 
-    if (Object.keys(filters).length === 0) {
-      await get().loadTeachers(page + 1);
-    } else {
-      const nextPage = page + 1;
-      const isEnd = nextPage * pageSize >= teachers.length;
-      set({ page: nextPage, isEndReached: isEnd });
-    }
+    const nextPage = page + 1;
+    set({ page: nextPage, status: "idle" });
+    await get().loadTeachers(nextPage);
   },
 
   getVisibleTeachers: () => {
@@ -189,15 +239,32 @@ export const usePaginatedTeachersStore = create<TeachersStore>((set, get) => ({
   resetTeachers: () =>
     set({
       teachers: [],
-      page: 1,
-      lastKey: null,
-      isEndReached: false,
+      status: "idle",
     }),
 
   resetFavorites: () =>
     set({
       favorites: [],
       favoriteTeachers: [],
-      favoritePage: 1,
+      status: "idle",
     }),
+
+  initFromUrl: async (params: URLSearchParams) => {
+    const page = Number(params.get("page") ?? 1);
+    const pageSize = Number(params.get("limit") ?? 4);
+    const lastKey = params.get("lastKey");
+
+    const filters: Filters = {};
+
+    const language = params.get("language");
+    if (language) filters.language = language;
+
+    const level = params.get("level");
+    if (level) filters.level = level;
+
+    const price = params.get("price_per_hour");
+    if (price) filters.price_per_hour = Number(price);
+
+    set({ page, pageSize, lastKey, filters });
+  },
 }));

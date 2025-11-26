@@ -77,7 +77,7 @@ export default function AppBar({ className, theme, setTheme }: AppBarProps) {
             onCloseMenu={handleCloseMenu}
           />
           {user ? (
-            <div className={css.userMenu}>
+            <div className={clsx(css.wrapMenu, isOpen && css.open)}>
               <UserMenu
                 className={clsx(css.userMenu, isOpen && css.open)}
                 onCloseMenu={handleCloseMenu}
@@ -85,7 +85,7 @@ export default function AppBar({ className, theme, setTheme }: AppBarProps) {
               <ThemeToggle theme={theme} setTheme={setTheme} />
             </div>
           ) : (
-            <div className={css.userMenu}>
+            <div className={clsx(css.wrapMenu, isOpen && css.open)}>
               <AuthMenu
                 className={clsx(css.userMenu, isOpen && css.open)}
                 onCloseMenu={handleCloseMenu}

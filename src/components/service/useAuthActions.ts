@@ -14,12 +14,15 @@ import { auth, database } from "../../firebase";
 import { useAuthStore } from "../zustand/stores/authStore";
 import { FirebaseError } from "firebase/app";
 import type { RegistrationData, LoginData } from "../validation/validation";
-import { usePaginatedTeachersStore } from "../zustand/stores/teachers";
+import { teachersStore } from "../zustand/stores/teachers";
 
 export function useAuthActions() {
   const setUser = useAuthStore.getState().setUser;
 
-  const saveUserToDatabase = async (user: User, additionalData?: any) => {
+  const saveUserToDatabase = async (
+    user: User,
+    additionalData?: Partial<RegistrationData>
+  ) => {
     const userRef = ref(database, `users/${user.uid}`);
 
     const snapshot = await get(userRef);
@@ -90,7 +93,7 @@ export function useAuthActions() {
   const logout = async (): Promise<void> => {
     await signOut(auth);
     setUser(null);
-    usePaginatedTeachersStore.getState().resetFavorites();
+    teachersStore.getState().resetFavorites();
   };
 
   const googleLogin = async (): Promise<User> => {

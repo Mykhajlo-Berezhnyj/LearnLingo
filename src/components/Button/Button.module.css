@@ -10,6 +10,7 @@
 
 .btnPrimary {
   background-color: var(--color-primary);
+  overflow: hidden;
 
   &:hover {
     background-color: var(--color-secondary);

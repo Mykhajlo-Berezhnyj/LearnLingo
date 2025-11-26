@@ -21,7 +21,7 @@ export default function Advantages({ className }: AdvantagesProps) {
           rx="30"
           ry="30"
           fill="none"
-          vector-effect="non-scaling-stroke"
+          vectorEffect="non-scaling-stroke"
         />
       </svg>
       <ul className={css.list}>

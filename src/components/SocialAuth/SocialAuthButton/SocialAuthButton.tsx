@@ -25,7 +25,9 @@ export default function SocialAuthButton({
       toast.success(`Welcome, ${user?.displayName ?? "user"}!`);
       closeModal();
     } catch (err) {
-      toast.error("Social login failed");
+      const message =
+        err instanceof Error ? err.message : "Social login failed";
+      toast.error(message);
     }
   };
 

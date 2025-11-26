@@ -1,0 +1,8 @@
+.btnClear {
+  width: 220px;
+  background-color: var(--color-font-main);
+  margin: 0, auto;
+  align-items: center;
+  height: 48px;
+  color: red;
+}

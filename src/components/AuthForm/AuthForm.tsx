@@ -11,6 +11,7 @@ import type { User } from "firebase/auth";
 import Icon from "../Icon/Icon";
 import { useAuthStore } from "../zustand/stores/authStore";
 import { handleFirebaseError } from "../utils/handleFirebaseError";
+import clsx from "clsx";
 
 export interface FieldConfig<T> {
   name: Path<T>;
@@ -151,7 +152,13 @@ export default function AuthForm<
                 <h3 className={css.radioLabel}>{rest.placeholder}</h3>
                 <div key={name} className={css.radioGroup}>
                   {options.map((opt) => (
-                    <label key={opt.value} className={css.radioOption}>
+                    <label
+                      key={opt.value}
+                      className={clsx(
+                        css.radioOption,
+                        errorMessage && css.error
+                      )}
+                    >
                       <input
                         type="radio"
                         value={opt.value}
@@ -162,17 +169,21 @@ export default function AuthForm<
                         <Icon
                           iconName={"radio-checked"}
                           size={24}
-                          className={css.checked}
+                          className={errorMessage ? css.error : css.checked}
                         />
                       ) : (
-                        <Icon iconName={"radio"} size={24} />
+                        <Icon
+                          iconName={"radio"}
+                          size={24}
+                          className={errorMessage ? css.error : css.radio}
+                        />
                       )}
                       <span>{opt.label}</span>
                     </label>
                   ))}
                 </div>
                 {errorMessage && (
-                  <span className={css.error}>{errorMessage}</span>
+                  <span className={css.errorMessage}>{errorMessage}</span>
                 )}
               </div>
             );

@@ -76,12 +76,16 @@ input {
   }
 }
 
-.error {
+.errorMessage {
   position: absolute;
   font-size: var(--fs-small);
-  bottom: -18px;
+  bottom: -36px;
   left: 16px;
-  color: red;
+  color: var(--color-error);
+
+  @media (min-width: 768px) {
+    bottom: -24px;
+  }
 }
 
 .radioWrap {
@@ -121,8 +125,23 @@ input[type="radio"] {
   letter-spacing: 0;
 }
 
+.radioOption.error {
+  color: var(--color-error);
+}
+
 .checked {
   fill: var(--color-primary);
   stroke: var(--color-primary);
-  color: red;
+}
+
+.radio {
+  stroke: #121417;
+  stroke-opacity: 0.2;
+}
+
+.error {
+  fill: var(--color-error);
+  stroke: var(--color-error);
+  stroke-opacity: 1;
+  color: var(--color-error);
 }
