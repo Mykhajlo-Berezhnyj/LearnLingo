@@ -14,8 +14,9 @@
 
   &:hover {
     background-color: var(--color-secondary);
-    box-shadow: 0 0 10px rgba(13, 110, 253, 0.6),
-      0 0 20px rgba(13, 110, 253, 0.4), 0 0 30px rgba(13, 110, 253, 0.2);
+    box-shadow: 0 0 10px rgba(var(--color-primary-rgb), 0.6),
+      0 0 20px rgba(var(--color-primary-rgb), 0.4),
+      0 0 30px rgba(var(--color-primary-rgb), 0.2);
     animation: pulseGlow 2s infinite ease-in-out;
   }
 }
@@ -35,16 +36,19 @@
 
 @keyframes pulseGlow {
   0% {
-    box-shadow: 0 0 10px rgba(13, 110, 253, 0.6),
-      0 0 20px rgba(13, 110, 253, 0.4), 0 0 30px rgba(13, 110, 253, 0.2);
+    box-shadow: 0 0 10px rgba(var(--color-secondary-rgb) 0.6),
+      0 0 20px rgba(var(--color-secondary-rgb), 0.4),
+      0 0 30px rgba(var(--color-secondary-rgb), 0.2);
   }
   50% {
-    box-shadow: 0 0 20px rgba(13, 110, 253, 0.8),
-      0 0 40px rgba(13, 110, 253, 0.6), 0 0 60px rgba(13, 110, 253, 0.4);
+    box-shadow: 0 0 20px rgba() var(--color-secondary-rgb, 0.8),
+      0 0 40px rgba(var(--color-secondary-rgb), 0.6),
+      0 0 60px rgba(var(--color-secondary-rgb), 0.4);
   }
   100% {
-    box-shadow: 0 0 10px rgba(13, 110, 253, 0.6),
-      0 0 20px rgba(13, 110, 253, 0.4), 0 0 30px rgba(13, 110, 253, 0.2);
+    box-shadow: 0 0 10px rgba(var(--color-secondary-rgb), 0.6),
+      0 0 20px rgba(var(--color-secondary-rgb), 0.4),
+      0 0 30px rgba(var(--color-secondary-rgb), 0.2);
   }
 }
 

@@ -9,7 +9,7 @@ import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import clsx from "clsx";
-import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import ThemeSwitcher from "../Button/ThemeSwitcher/ThemeSwitcher";
 
 type AppBarProps = {
   className?: string;
@@ -78,19 +78,19 @@ export default function AppBar({ className, theme, setTheme }: AppBarProps) {
           />
           {user ? (
             <div className={clsx(css.wrapMenu, isOpen && css.open)}>
+              <ThemeSwitcher />
               <UserMenu
                 className={clsx(css.userMenu, isOpen && css.open)}
                 onCloseMenu={handleCloseMenu}
               />
-              <ThemeToggle theme={theme} setTheme={setTheme} />
             </div>
           ) : (
             <div className={clsx(css.wrapMenu, isOpen && css.open)}>
+              <ThemeSwitcher />
               <AuthMenu
                 className={clsx(css.userMenu, isOpen && css.open)}
                 onCloseMenu={handleCloseMenu}
               />
-              <ThemeToggle theme={theme} setTheme={setTheme} />
             </div>
           )}
         </Wrapper>

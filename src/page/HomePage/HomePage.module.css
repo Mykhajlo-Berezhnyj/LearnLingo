@@ -37,6 +37,7 @@
   @media (min-width: 425px) {
     width: 100%;
     gap: 32px;
+    padding-inline: 36px;
   }
 
   @media (min-width: 1440px) {
