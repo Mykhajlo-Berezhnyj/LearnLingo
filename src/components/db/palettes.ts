@@ -1,5 +1,5 @@
-export const palettes = {
-  1: {
+export const palettes: Record<string, Record<string, string>> = {
+  yellow: {
     "--color-primary": "#f4c550",
     "--color-secondary": " #fbe9baff",
     "--color-primary-rgb": "244, 197, 80",
@@ -11,7 +11,7 @@ export const palettes = {
     "--svg-bg-end1": "#E7C885",
   },
 
-  2: {
+  mint: {
     "--color-primary": "#9fbaae",
     "--color-secondary": " rgba(203, 222, 211, 1)",
     "--color-primary-rgb": "159, 186, 174",

@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import css from "./ThemeSwitcher.module.css";
 import { palettes } from "../../db/palettes";
+import Button from "../Button";
 
 export default function ThemeSwitcher() {
-  const [palette, setPalette] = useState(
-    () => localStorage.getItem("palette") || "blue"
-  );
+  const [palette, setPalette] = useState(() => {
+    const saved = localStorage.getItem("palette");
+    return saved && palettes[saved] ? saved : "yellow";
+  });
   const [mode, setMode] = useState(() => {
     const saved = localStorage.getItem("mode");
     if (saved) return saved;
@@ -72,18 +74,27 @@ export default function ThemeSwitcher() {
                   d={d}
                   fill={palettes[name]["--color-primary"]}
                   className={css.sector}
+                  role="button"
+                  aria-label={`Switch to ${name} palette`}
                   onClick={() => setPalette(name)}
-                />
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") setPalette(name);
+                  }}
+                >
+                  <title>{name}</title>
+                </path>
               );
             })}
           </svg>
 
-          <div
+          <Button
             className={css.innerCircle}
+            title="Theme Switcher"
+            aria-label="Theme Switcher"
             onClick={() => setMode(mode === "dark" ? "light" : "dark")}
           >
             {mode === "dark" ? "🌙" : "☀️"}
-          </div>
+          </Button>
         </div>
       )}
     </div>
