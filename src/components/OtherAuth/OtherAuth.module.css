@@ -1,0 +1,22 @@
+.otherAuth {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.btnGoogle {
+  gap: 10px;
+  height: 50px;
+  width: 200px;
+}
+
+.btnOtherAuth {
+  border: none;
+  text-decoration: underline;
+  padding-inline: 20px;
+}

@@ -1,10 +1,12 @@
 import BookTrialLessonForm from "../BookTrialLessonForm/BookTrialLessonForm";
 import LoginForm from "../LoginForm/LoginForm";
 import RegistrationForm from "../RegisterForm/RegisterForm";
-import type { ModalType } from "../zustand/stores/modalStore";
+import { ModalType } from "../zustand/stores/modalStore";
 import AthRequired from "../authRequired/authRequired";
 
 export function renderModalContent(modalType: ModalType) {
+  if (!modalType) return null;
+
   switch (modalType) {
     case "login":
       return <LoginForm />;

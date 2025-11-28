@@ -4,6 +4,7 @@ import TeachersList from "../TeachersList/TeachersList";
 import type { Teacher } from "../../types/teacher";
 import Container from "../Container/Container";
 import Loader from "../Loader/Loader";
+import { teachersStore } from "../zustand/stores/teachers";
 
 interface Props {
   className?: string;
@@ -11,6 +12,7 @@ interface Props {
   status: string;
   isEndReached: boolean;
   page: number;
+  totalCount: number | null;
   onLoadMore: () => void;
   emptyMessage?: string;
 }
@@ -21,6 +23,7 @@ export default function TeachersSection({
   status,
   isEndReached,
   onLoadMore,
+  totalCount,
   emptyMessage = "No teachers found.",
 }: Props) {
   return (
@@ -43,7 +46,9 @@ export default function TeachersSection({
         {isEndReached && teachers.length > 0 && (
           <p className={css.endMessage}>No more teachers available.</p>
         )}
-
+        {status === "succeeded" && totalCount === null && (
+          <p>No favorites for you</p>
+        )}
         {status === "succeeded" && teachers.length === 0 && (
           <p className={css.emptyMessage}>{emptyMessage}</p>
         )}

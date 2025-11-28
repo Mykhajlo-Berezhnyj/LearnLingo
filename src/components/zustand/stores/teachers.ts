@@ -19,7 +19,7 @@ interface TeachersStore {
   sortBy: "rating" | "price_per_hour";
   page: number;
   pageSize: number;
-  totalCount: number;
+  totalCount: number | null;
   lastKey: string | null;
   isEndReached: boolean;
   status: Status;
@@ -28,10 +28,12 @@ interface TeachersStore {
   favoriteTeachers: Teacher[];
   favoritePage: number;
   favoritePageSize: number;
+  totalCountFavorites: number | null;
 
   userId: string | null;
 
   setUserId: (id: string) => void;
+
   setFilters: (filters: Partial<Filters>) => void;
   clearFilters: () => void;
   setSortBy: (sort: "rating" | "price_per_hour") => void;
@@ -41,6 +43,7 @@ interface TeachersStore {
   setFavoritePage: (page: number) => void;
   resetFavoritePage: () => void;
   getVisibleFavorites: () => Teacher[];
+  setTotalCountFavorites: (count: number) => void;
 
   toggleFavorite: (id: string) => Promise<void>;
   loadTeachers: (page?: number) => Promise<void>;
@@ -67,9 +70,15 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
   favoriteTeachers: [],
   favoritePage: 1,
   favoritePageSize: 4,
+  totalCountFavorites: null,
 
   userId: null,
   setUserId: (id) => set({ userId: id }),
+
+  setTotalCountFavorites: (count) =>
+    set({
+      totalCountFavorites: count,
+    }),
 
   setFilters: (newFilters) => {
     const cleanFilters: Filters = {};
@@ -77,7 +86,6 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
       ([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
           cleanFilters[key] = value;
-          console.log("🚀 ~ cleanFilters:", cleanFilters);
         }
       }
     );
@@ -87,6 +95,7 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
       page: 1,
       lastKey: null,
       isEndReached: false,
+      status: "idle",
     }));
 
     updateQueryParams({
@@ -138,20 +147,31 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
       ? favorites.filter((f) => f !== id)
       : [...favorites, id];
 
-    set({ favorites: updatedFavorites });
+    set({
+      favorites: updatedFavorites,
+      totalCountFavorites:
+        updatedFavorites.length === 0 ? null : updatedFavorites.length,
+    });
 
     try {
       if (isAlreadyFavorite) {
         await removeFavorite(userId, id);
+        const updatedTeachers = favoriteTeachers.filter((t) => t.id !== id);
         set({
-          favoriteTeachers: favoriteTeachers.filter((t) => t.id !== id),
+          favoriteTeachers: updatedTeachers,
+          totalCountFavorites:
+            updatedTeachers.length === 0 ? null : updatedTeachers.length,
         });
       } else {
         await saveFavorite(userId, id);
         const snapshot = await getAllTeachers();
         const found = snapshot.find((t) => t.id === id);
         if (found) {
-          set({ favoriteTeachers: [...favoriteTeachers, found] });
+          const updatedTeachers = [...favoriteTeachers, found];
+          set({
+            favoriteTeachers: updatedTeachers,
+            totalCountFavorites: updatedTeachers.length,
+          });
         }
       }
     } catch (error) {
@@ -161,15 +181,31 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
 
   loadFavoriteTeachers: async () => {
     const userId = useAuthStore.getState().user?.uid;
-    if (!userId) return;
+    const status = get().status;
 
+    if (!userId) return;
+    if (status === "loading") return;
+
+    set({ status: "loading" });
     try {
       const ids = await fetchFavorites(userId);
       set({ favorites: ids });
+      if (ids.length === 0) {
+        set({
+          favoriteTeachers: [],
+          status: "succeeded",
+          totalCountFavorites: null,
+        });
+        return;
+      }
 
       const allTeachers = await getAllTeachers();
       const matched = allTeachers.filter((t) => ids.includes(t.id));
-      set({ favoriteTeachers: matched, status: "succeeded" });
+      set({
+        favoriteTeachers: matched,
+        status: "succeeded",
+        totalCountFavorites: matched.length,
+      });
     } catch (error) {
       console.error("Failed to load favorite teachers:", error);
       set({ status: "failed" });
@@ -240,6 +276,7 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
     set({
       teachers: [],
       status: "idle",
+      // totalCount: 0,
     }),
 
   resetFavorites: () =>
@@ -247,6 +284,7 @@ export const teachersStore = create<TeachersStore>((set, get) => ({
       favorites: [],
       favoriteTeachers: [],
       status: "idle",
+      totalCountFavorites: null,
     }),
 
   initFromUrl: async (params: URLSearchParams) => {

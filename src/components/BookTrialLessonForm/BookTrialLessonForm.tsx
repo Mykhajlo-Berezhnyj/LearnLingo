@@ -32,7 +32,7 @@ export default function BookTrialLessonForm() {
   const user = useAuthStore((state) => state.user);
 
   if (user === null) {
-    setModalType("authRequired");
+    setModalType("authRequired", "small");
     return;
   }
 

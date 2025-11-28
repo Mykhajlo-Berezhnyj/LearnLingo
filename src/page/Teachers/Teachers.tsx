@@ -15,6 +15,7 @@ export default function Teachers() {
     loadMore,
     initFromUrl,
     filters,
+    totalCount,
   } = teachersStore();
 
   const isFirstMount = useRef(true);
@@ -31,13 +32,14 @@ export default function Teachers() {
 
   return (
     <div className={css.teachersPage}>
-      <FilterPanel />
+      <FilterPanel totalCount={totalCount} />
       <TeachersSection
         className={css.teachers}
         teachers={getVisibleTeachers()}
         status={status}
         isEndReached={isEndReached}
         page={page}
+        totalCount={totalCount}
         onLoadMore={loadMore}
       />
     </div>

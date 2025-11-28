@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import css from "./NavBar.module.css";
 import { NavLink } from "react-router-dom";
 import { useAuthStore } from "../zustand/stores/authStore";
+import { teachersStore } from "../zustand/stores/teachers";
 
 type NavBarProps = {
   className?: string;
@@ -13,6 +14,7 @@ export default function NavBar({ className, onCloseMenu }: NavBarProps) {
     return clsx(css.link, isActive && css.active);
   };
   const { user } = useAuthStore();
+  const { resetTeachers, resetFavorites } = teachersStore();
 
   return (
     <nav className={className}>
@@ -30,7 +32,10 @@ export default function NavBar({ className, onCloseMenu }: NavBarProps) {
           <NavLink
             to="/teachers"
             className={getActiveLinkClass}
-            onClick={() => onCloseMenu()}
+            onClick={() => {
+              onCloseMenu();
+              resetTeachers();
+            }}
           >
             Teachers
           </NavLink>
@@ -40,7 +45,10 @@ export default function NavBar({ className, onCloseMenu }: NavBarProps) {
             <NavLink
               to="/favorites"
               className={getActiveLinkClass}
-              onClick={() => onCloseMenu()}
+              onClick={() => {
+                onCloseMenu();
+                resetFavorites();
+              }}
             >
               Favorites
             </NavLink>

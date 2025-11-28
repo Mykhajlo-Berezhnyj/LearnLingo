@@ -5,6 +5,8 @@ import { useAuthActions } from "../service/useAuthActions";
 import { LoginData, loginSchema } from "../validation/validation";
 import { useModalStore } from "../zustand/stores/modalStore";
 import { useAuthStore } from "../zustand/stores/authStore";
+import OtherAuth from "../OtherAuth/OtherAuth";
+import css from "../RegisterForm/RegisterForm.module.css";
 
 const fields: FieldConfig<LoginData>[] = [
   { name: "email", type: "email", placeholder: "Email" },
@@ -33,6 +35,7 @@ export default function LoginForm() {
       }}
       fields={fields}
       defaultValues={{ email: pendingEmail ?? "" }}
+      otherContent2={<OtherAuth className={css.otherAuth} />}
     />
   );
 }

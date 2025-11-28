@@ -5,6 +5,7 @@ import { useAuthStore } from "../../components/zustand/stores/authStore";
 import { usePaginatedFavorites } from "../../components/utils/pagination/usePaginatedFavorites";
 import TeachersSection from "../../components/TeachersSection/TeachersSection";
 import FilterPanel from "../../components/FilterPanel/FilterPanel";
+import { Navigate } from "react-router-dom";
 
 export default function Favorites() {
   const user = useAuthStore((s) => s.user);
@@ -12,8 +13,13 @@ export default function Favorites() {
   const { visibleFavorites, isEndReached, loadMore, page } =
     usePaginatedFavorites();
 
-  const { loadFavoriteTeachers, resetFavorites, clearFilters, status } =
-    teachersStore();
+  const {
+    loadFavoriteTeachers,
+    resetFavorites,
+    clearFilters,
+    status,
+    totalCountFavorites,
+  } = teachersStore();
 
   useEffect(() => {
     resetFavorites();
@@ -26,15 +32,20 @@ export default function Favorites() {
     }
   }, [user?.uid, clearFilters]);
 
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <div className={css.teachersPage}>
-      <FilterPanel />
+      <FilterPanel totalCount={totalCountFavorites} />
       <TeachersSection
         className={css.teachers}
         teachers={visibleFavorites}
         status={status}
         isEndReached={isEndReached}
         page={page}
+        totalCount={totalCountFavorites}
         onLoadMore={loadMore}
       />
     </div>

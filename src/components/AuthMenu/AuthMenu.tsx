@@ -11,14 +11,15 @@ type AuthMenuProps = {
 };
 
 export default function AuthMenu({ className, onCloseMenu }: AuthMenuProps) {
-  const { modalType, setModalType, closeModal } = useModalStore();
+  const { modalSize, modalType, setModalType, closeModal } = useModalStore();
+
   return (
     <div className={className}>
       <ul className={css.btnWrapper}>
         <li>
           <BtnLogInOut
             onClick={() => {
-              setModalType("login");
+              setModalType("login", "large");
               onCloseMenu();
             }}
           />
@@ -27,7 +28,7 @@ export default function AuthMenu({ className, onCloseMenu }: AuthMenuProps) {
           <Button
             className={css.btnRegister}
             onClick={() => {
-              setModalType("register");
+              setModalType("register", "large");
               onCloseMenu();
             }}
           >
@@ -35,9 +36,6 @@ export default function AuthMenu({ className, onCloseMenu }: AuthMenuProps) {
           </Button>
         </li>
       </ul>
-      <Modal isOpen={!!modalType} onClose={closeModal}>
-        {renderModalContent(modalType)}
-      </Modal>
     </div>
   );
 }

@@ -6,8 +6,8 @@ import css from "./FilterPanel.module.css";
 import Container from "../Container/Container";
 import BtnClearFilters from "../Button/BtnClearFilters/BtnClearFilters";
 
-export default function FilterPanel() {
-  const { filters, setFilters, totalCount } = teachersStore();
+export default function FilterPanel({ totalCount }: { totalCount: number }) {
+  const { filters, setFilters, status } = teachersStore();
   const [languages, setLanguages] = useState<string[]>([]);
 
   const levels = [
@@ -79,7 +79,9 @@ export default function FilterPanel() {
               : `Found ${totalCount} teachers`}
           </p>
         )}
-        {totalCount === 0 && <BtnClearFilters className={css.btnClear} />}
+        {totalCount === 0 && status === "succeeded" && (
+          <BtnClearFilters className={css.btnClear} />
+        )}
       </Container>
     </div>
   );

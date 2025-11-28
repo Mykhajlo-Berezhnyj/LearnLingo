@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { teachersStore } from "../../zustand/stores/teachers";
 import { applyFilters } from "../filtering/applyFilters";
 
@@ -9,9 +10,15 @@ export function usePaginatedFavorites() {
     favoritePageSize,
     resetFavoritePage,
     setFavoritePage,
+    setTotalCountFavorites,
   } = teachersStore();
 
   const filtered = applyFilters(favoriteTeachers, filters);
+
+  useEffect(() => {
+    setTotalCountFavorites(filtered.length);
+    teachersStore.setState({ status: "succeeded" });
+  }, [filtered.length, setTotalCountFavorites]);
 
   const visibleFavorites = filtered.slice(0, favoritePage * favoritePageSize);
 

@@ -29,9 +29,6 @@ export default function BtnTrialLesson({
       >
         Book trial lesson
       </Button>
-      <Modal isOpen={!!modalType} onClose={closeModal} size={modalSize}>
-        {renderModalContent(modalType)}
-      </Modal>
     </>
   );
 }

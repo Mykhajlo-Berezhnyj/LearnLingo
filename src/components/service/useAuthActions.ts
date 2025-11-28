@@ -103,8 +103,8 @@ export function useAuthActions() {
       const user = result.user;
 
       await saveUserToDatabase(user);
-
       setUser(user);
+
       return user;
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {

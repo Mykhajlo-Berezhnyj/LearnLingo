@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AppBar from "./components/AppBar/AppBar";
@@ -7,32 +7,21 @@ import { useInitFavorites } from "./components/utils/useInitFavorites";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import NotFoundPage from "./page/NotFoundPage/NotFoundPage";
 import Loader from "./components/Loader/Loader";
+import { useModalStore } from "./components/zustand/stores/modalStore";
+import { renderModalContent } from "./components/utils/renderModalContent";
+import Modal from "./components/Modal/Modal";
 
 const HomePage = lazy(() => import("./page/HomePage/HomePage"));
 const Teachers = lazy(() => import("./page/Teachers/Teachers"));
 const Favorites = lazy(() => import("./page/Favorites/Favorites"));
 
 function App() {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      return savedTheme;
-    }
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    return prefersDark ? "dark" : "light";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.body.className = theme;
-  }, [theme]);
+  const { modalType, modalSize, closeModal } = useModalStore();
   useInitFavorites();
 
   return (
     <>
-      <AppBar className="header" theme={theme} setTheme={setTheme} />
+      <AppBar className="header" />
 
       <Suspense fallback={<Loader className="fallbackLoader" />}>
         <Routes>
@@ -43,12 +32,16 @@ function App() {
         </Routes>
       </Suspense>
       <ScrollToTop />
+      <Modal isOpen={!!modalType} onClose={closeModal} size={modalSize}>
+        {renderModalContent(modalType)}
+      </Modal>
       <Toaster
         position="top-right"
         toastOptions={{
           success: {
             style: {
               background: "#4BB543",
+              padding: "20px",
               color: "white",
             },
           },

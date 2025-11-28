@@ -7,6 +7,8 @@ import { useAuthActions } from "../service/useAuthActions";
 import { checkEmailExists } from "../service/checkEmailExists";
 import { useAuthStore } from "../zustand/stores/authStore";
 import toast from "react-hot-toast";
+import OtherAuth from "../OtherAuth/OtherAuth";
+import css from "./RegisterForm.module.css";
 
 const fields: FieldConfig<RegistrationData>[] = [
   { name: "name", placeholder: "Name" },
@@ -54,6 +56,7 @@ export default function RegistrationForm() {
         closeModal();
       }}
       fields={fields}
+      otherContent2={<OtherAuth className={css.otherAuth} />}
     />
   );
 }

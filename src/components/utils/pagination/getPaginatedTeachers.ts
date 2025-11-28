@@ -63,7 +63,6 @@ export async function getPaginatedTeachers(
     const countSnap = await getFromDB(query(ref(db, "teachers")));
 
     totalCount = countSnap.size;
-    console.log("🚀 ~ getPaginatedTeachers ~ totalCount:", totalCount);
   } else {
     const primary = pickBestBackendFilter(filters);
     if (!primary) {
@@ -112,7 +111,7 @@ export async function getPaginatedTeachers(
     : applyFilters(allTeachers, filters);
 
   totalCount = hasNoFilters ? totalCount : filtered.length;
-  console.log("🚀 ~ getPaginatedTeachers ~ totalCount:", totalCount);
+
   if (hasNoFilters) {
     const paginated = filtered.slice(0, pageSize);
     const newLastKey = paginated.length > 0 ? paginated.at(-1)!.id : null;

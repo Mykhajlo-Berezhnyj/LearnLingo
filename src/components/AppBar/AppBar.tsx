@@ -7,17 +7,15 @@ import { useAuthStore } from "../zustand/stores/authStore";
 import UserMenu from "../UserMenu/UserMenu";
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
-import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import ThemeSwitcher from "../Button/ThemeSwitcher/ThemeSwitcher";
 
 type AppBarProps = {
   className?: string;
-  theme: string;
-  setTheme: Dispatch<SetStateAction<string>>;
 };
 
-export default function AppBar({ className, theme, setTheme }: AppBarProps) {
+export default function AppBar({ className }: AppBarProps) {
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
 

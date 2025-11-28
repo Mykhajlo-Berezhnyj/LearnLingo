@@ -14,10 +14,10 @@ interface ModalState {
 
 export const useModalStore = create<ModalState>((set) => ({
   modalType: null,
-  modalSize: null,
+  modalSize: "large",
   selectedTeacher: null,
-  setModalType: (type, size = null) =>
+  setModalType: (type, size = "large") =>
     set({ modalType: type, modalSize: size }),
   setSelectedTeacher: (teacher: Teacher) => set({ selectedTeacher: teacher }),
-  closeModal: () => set({ modalType: null, modalSize: null }),
+  closeModal: () => set({ modalType: null, modalSize: "large" }),
 }));
