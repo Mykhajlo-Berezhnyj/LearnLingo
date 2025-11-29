@@ -40,6 +40,14 @@
     padding-inline: 36px;
   }
 
+  @media (min-width: 768px) {
+    padding-inline: 16px;
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: 32px;
+  }
+
   @media (min-width: 1440px) {
     padding-block: 98px;
     width: 720px;
@@ -61,6 +69,10 @@
 
   @media (min-width: 425px) {
     width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    min-width: 360px;
   }
 
   @media (min-width: 1440px) {

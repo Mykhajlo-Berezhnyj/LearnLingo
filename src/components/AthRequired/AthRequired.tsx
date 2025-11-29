@@ -1,6 +1,6 @@
 import Button from "../Button/Button";
 import { useModalStore } from "../zustand/stores/modalStore";
-import css from "./authRequired.module.css";
+import css from "./AthRequired.module.css";
 
 export default function AthRequired() {
   const setModalType = useModalStore((state) => state.setModalType);

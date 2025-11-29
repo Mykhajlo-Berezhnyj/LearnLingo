@@ -31,7 +31,7 @@ Removing a favorite updates the UI and data instantly.
 🔐 Authentication (Firebase)
 Implemented using Firebase Authentication:
 
-Sign Up / Log In / Log Out
+Sign Up / Log In / Log Out /Sign in Gogle /
 Get current user
 Protected routes (Favorites page)
 Auth state is stored in a Zustand store for global access.
@@ -52,28 +52,32 @@ Registration Modal – for account creation
 Book Trial Lesson Modal – for scheduling a trial session
 AuthRequired Modal – shown when an unauthenticated user tries to access a restricted feature
 
-
 All modals can be closed by:
-Clicking the close button 
+Clicking the close button
 Clicking the backdrop
 Pressing the Esc key
+
+Additional Features
+Google Sign‑In Support Both Login and Registration modals include an option to sign in or register using Google OAuth.
+
+Automatic Switch Between Registration and Login In the Registration Modal, if the user enters an email address that is already registered in the system, the modal automatically switches to the Login form. This ensures a seamless experience and prevents duplicate accounts.
 
 🧠 Firebase Database Structure
 Collection: teachers
 
-Field	Type	Description
-name	string	Teacher’s first name
-surname	string	Teacher’s last name
-languages	string[]	Languages taught
-levels	string[]	Levels taught (A1–C2)
-rating	number	Average rating
-reviews	object[]	Student reviews
-price_per_hour	number	Hourly rate
-lessons_done	number	Number of completed lessons
-avatar_url	string	Profile image
-lesson_info	string	Short description
-conditions	string	Lesson conditions
-experience	string	Teacher’s experience
+Field Type Description
+name string Teacher’s first name
+surname string Teacher’s last name
+languages string[] Languages taught
+levels string[] Levels taught (A1–C2)
+rating number Average rating
+reviews object[] Student reviews
+price_per_hour number Hourly rate
+lessons_done number Number of completed lessons
+avatar_url string Profile image
+lesson_info string Short description
+conditions string Lesson conditions
+experience string Teacher’s experience
 
 You can fill the collection using teachers.json.
 
@@ -90,39 +94,45 @@ TypeScript
 🧩 Project Structure
 src/
 ├── components/
-│   ├── AuthBar/
-│   ├── AuthForm/
-│   ├── AuthMenu/
-│   ├── BookTrialLessonForm/
-│   ├── Button/
-│   ├── Container/
-│   ├── HeroBanners/
-│   ├── HeroImg/
-│   ├── Icon/
-│   ├── Imac/
-│   ├── InputField/
-│   ├── Logo/
-│   ├── LoginForm/
-│   ├── Modal/
-│   ├── NavBar/
-│   ├── RegisterForm/
-│   ├── service/
-│   ├── TeacherCard/
-│   ├── TeacherList/
-│   ├── UserMenu/
-│   └── Icon/
+│ ├── Advantages/
+│ ├── AuthBar/
+│ ├── AuthForm/
+│ ├── AuthMenu/
+│ ├── BookTrialLessonForm/
+│ ├── Button/
+│ ├── Container/
+│ ├── HeroBanners/
+│ ├── HeroImg/
+│ ├── Icon/
+│ ├── Imac/
+│ ├── InputField/
+│ ├── Logo/
+│ ├── LoginForm/
+│ ├── Modal/
+│ ├── NavBar/
+│ ├── RegisterForm/
+│ ├── service/
+│ ├── TeacherCard/
+│ ├── TeacherList/
+│ ├── TeachersSection/
+│ ├── UserMenu/
+│ ├── utils/
+│ │ ├──filtering
+│ │ ├──pagination
+│ └── Icon/
 ├── pages/
-│   ├── Home/
-│   ├── Teachers/
-│   └── Favorites/
+│ ├── Home/
+│ ├── Teachers/
+│ ├── Favorites/
+│ └── NotFoundPage/
 ├── zustand/
-│   ├── stores/
+│ ├── stores/
 ├── service/
-│   ├── firebase.ts
-│   └── useAuthActions.ts
+│ ├── firebase.ts
+│ └── useAuthActions.ts
 └── validation/
-    ├── validation.ts
-    └── passwordSchema.ts
+├── validation.ts
+└── passwordSchema.ts
 
 🌐 Deployment
 
@@ -130,4 +140,4 @@ The app can be deployed using:
 
 GitHub Pages: https://github.com/Mykhajlo-Berezhnyj/LearnLingo.git
 
-Netlify:
+Netlify: https://learnlingo-app.netlify.app/

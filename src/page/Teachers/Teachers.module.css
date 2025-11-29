@@ -4,6 +4,7 @@
   gap: 32px;
   justify-content: center;
   background-color: var(--bgcolor-teacher);
+  padding-bottom: 96px;
 }
 
 .teachers {

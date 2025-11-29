@@ -2,7 +2,7 @@ import BookTrialLessonForm from "../BookTrialLessonForm/BookTrialLessonForm";
 import LoginForm from "../LoginForm/LoginForm";
 import RegistrationForm from "../RegisterForm/RegisterForm";
 import { ModalType } from "../zustand/stores/modalStore";
-import AthRequired from "../authRequired/authRequired";
+import AthRequired from "../AthRequired/AthRequired";
 
 export function renderModalContent(modalType: ModalType) {
   if (!modalType) return null;

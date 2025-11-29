@@ -43,7 +43,12 @@ export default function ThemeSwitcher() {
 
   return (
     <div className={css.wrapper} ref={ref}>
-      <button className={css.trigger} onClick={() => setOpen(!open)}>
+      <button
+        className={css.trigger}
+        title="Theme Switcher"
+        aria-label="Theme Switcher"
+        onClick={() => setOpen(!open)}
+      >
         {mode === "dark" ? "🌙" : "☀️"}
       </button>
 
@@ -89,8 +94,8 @@ export default function ThemeSwitcher() {
 
           <Button
             className={css.innerCircle}
-            title="Theme Switcher"
-            aria-label="Theme Switcher"
+            title={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}
+            aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}
             onClick={() => setMode(mode === "dark" ? "light" : "dark")}
           >
             {mode === "dark" ? "🌙" : "☀️"}
