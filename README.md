@@ -92,7 +92,7 @@ CSS Modules (scoped styling)
 TypeScript
 
 🧩 Project Structure
-\\\
+<pre> ```
 src/
 ├── components/
 │ ├── Advantages/
@@ -134,7 +134,7 @@ src/
 └── validation/
 ├── validation.ts
 └── passwordSchema.ts
-\\\
+ ```</pre>
 
 🌐 Deployment
 
