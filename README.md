@@ -92,6 +92,7 @@ CSS Modules (scoped styling)
 TypeScript
 
 🧩 Project Structure
+\\\
 src/
 ├── components/
 │ ├── Advantages/
@@ -133,6 +134,7 @@ src/
 └── validation/
 ├── validation.ts
 └── passwordSchema.ts
+\\\
 
 🌐 Deployment
 
